@@ -8,5 +8,7 @@ export default defineConfig({
   site: 'https://hferpi.com',
   vite: {
     plugins: [tailwindcss()]
-  }
+  },
+
+  integrations: [sitemap()]
 });

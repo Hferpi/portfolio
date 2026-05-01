@@ -8,8 +8,10 @@ urls:
     repo: "https://github.com/Hferpi/car-history-php"
 ---
 
-Proyecto de PHP de clase; la idea fue hacer una herramienta para facilitar el seguimiento del historial de reparaciones de los vehículos. Tiene integración con IA para leer facturas y extraer datos, ya que el OCR no daba buenos resultados.
+Proyecto de **PHP de clase**; la idea fue hacer una herramienta para facilitar el seguimiento del historial de reparaciones de los vehículos. Tiene **integración con IA para leer facturas** y extraer datos, ya que el OCR no daba buenos resultados.
 
-Puedes tener varios vehículos; se almacena toda la información en un SQLite. La idea era tenerlo y trabajar en local, pero se subió a AWS para practicar el despliegue. Políticas de uso, restricciones de IPs.
+Puedes tener varios vehículos; se almacena toda la información en un SQLite. La idea era tenerlo y trabajar en local, pero se **subió a AWS** se creo un **EC2 con todo lo necesario** para practicar el despliegue. Políticas de uso, restricciones de IPs.
 
-Una aplicación web robusta desarrollada con Laravel para la gestión y digitalización de recibos de mantenimiento automotriz. El sistema permite a los usuarios llevar un control exhaustivo de sus vehículos y transformar fotos de recibos físicos en registros digitales organizados.
+Una aplicación web robusta desarrollada con **Laravel** para la gestión y **digitalización de recibos** de mantenimiento automotriz. El sistema permite a los usuarios llevar un control exhaustivo de sus vehículos y transformar fotos de recibos físicos en registros digitales organizados.
+
+Desarrollado con compañia de: Alex

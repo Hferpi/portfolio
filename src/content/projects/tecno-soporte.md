@@ -8,6 +8,10 @@ urls:
     repo: "https://github.com/Hferpi/TecnoSoporte-IA"
 ---
 
-Un sistema que integra IA, n8n, Docker, frontend, backend y PostgreSQL para resolver un problema muy común: tener que revisar constantemente una bandeja de entrada llena de correos.
+Lo que empezo como un trabajo de investigación de IA acabo en un **proyecto funcional** para clase.
 
-Desarrollé un ecosistema completo diseñado para resolver un problema crítico de productividad: la saturación de bandejas de entrada. Este sistema automatiza la clasificación, el resumen y la priorización de correos electrónicos, eliminando la necesidad de revisión manual constante.
+Un sistema que **integra IA, n8n, Docker**, frontend, backend y PostgreSQL para resolver un problema muy común: tener que revisar constantemente una bandeja de entrada llena de correos.
+
+Desarrollamos un **ecosistema completo diseñado para resolver un problema** crítico de productividad: la saturación de bandejas de entrada. Este sistema **automatiza la clasificación, el resumen y la priorización de correos electrónicos,** eliminando la necesidad de revisión manual constante.
+
+Desarrollado con compañia de: Alex

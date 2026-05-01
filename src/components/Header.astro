@@ -1,13 +1,27 @@
 ---
 import { Image } from "astro:assets";
-// La variable menuOpen aquí no hace nada porque Astro es estático, 
+// La variable menuOpen aquí no hace nada porque Astro es estático,
 // la lógica debe ser de cliente (JS).
 ---
-<header class="mb-10 px-4 mx-auto w-full flex justify-between items-center p-2 bg-slate-700 border-b-2 border-slate-400 relative">
-    <a href="/#hero"><Image src="/icon.webp" alt="Logo" width={64} height={64} class="w-16 h-16"/></a>
-    
+
+<header
+    class="mb-10 px-4 mx-auto w-full flex justify-between items-center p-2 bg-slate-700 border-b-2 border-slate-400 relative"
+>
+    <a href="/#hero"
+        ><Image
+            src="/icon.webp"
+            alt="Logo"
+            width={64}
+            height={64}
+            class="w-16 h-16"
+        /></a
+    >
+
     <!-- Botón con ID para el script -->
-    <button id="menu-button" class="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none">
+    <button
+        id="menu-button"
+        class="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none"
+    >
         <span class="bg-white w-6 h-0.5 rounded mb-1"></span>
         <span class="bg-white w-6 h-0.5 rounded mb-1"></span>
         <span class="bg-white w-6 h-0.5 rounded"></span>
@@ -16,49 +30,79 @@ import { Image } from "astro:assets";
     <!-- Navegación Desktop -->
     <nav class="hidden md:block">
         <ul class="flex gap-7 items-center">
-            <li><a class="hover:underline hover:decoration-cyan-400" href="/">Home</a></li>
-            <li><a class="hover:underline hover:decoration-cyan-400" href="/#projects">Projects</a></li>
-            <li><a class="hover:underline hover:decoration-cyan-400" href="/about">About</a></li>
-            <li class="bg-slate-500 hover:bg-cyan-800 px-4 py-2 rounded-lg"><a href="https://linkedin.com..." target="_blank">¿Conectamos?</a></li>
+            <li>
+                <a class="hover:underline hover:decoration-cyan-400" href="/"
+                    >Home</a>
+            </li>
+            <li>
+                <a
+                    class="hover:underline hover:decoration-cyan-400"
+                    href="/#projects">Projects</a>
+            </li>
+            <li>
+                <a
+                    class="hover:underline hover:decoration-cyan-400"
+                    href="/about">About</a>
+            </li>
+            <li class="bg-slate-500 hover:bg-cyan-800 px-4 py-2 rounded-lg">
+                <a
+                    href="https://www.linkedin.com/in/hector-fern%C3%A1ndez-piquer-90026a165/"
+                    target="_blank">¿Conectamos?</a>
+            </li>
         </ul>
     </nav>
 
     <!-- Navegación Móvil con ID -->
-    <nav id="mobile-menu" class="hidden absolute top-full left-0 right-0 bg-slate-700 border-b-2 border-slate-400 md:hidden z-50">
+    <nav
+        id="mobile-menu"
+        class="hidden absolute top-full left-0 right-0 bg-slate-700 border-b-2 border-slate-400 md:hidden z-50"
+    >
         <ul class="flex flex-col gap-4 p-4">
             <li><a class="mobile-link block py-2" href="/">Home</a></li>
-            <li><a class="mobile-link block py-2" href="/#projects">Projects</a></li>
+            <li>
+                <a class="mobile-link block py-2" href="/#projects">Projects</a>
+            </li>
             <li><a class="mobile-link block py-2" href="/about">About</a></li>
-            <li class="bg-slate-500 text-center rounded-lg"><a class="mobile-link block py-2" href="https://linkedin.com...">¿Conectamos?</a></li>
+            <li class="bg-slate-500 text-center rounded-lg">
+                <a
+                    class="mobile-link block py-2"
+                    href="https://www.linkedin.com/in/hector-fern%C3%A1ndez-piquer-90026a165/"
+                    >¿Conectamos?</a>
+            </li>
         </ul>
     </nav>
 </header>
 
 <script>
-    // Función para inicializar el menú
-    function initMenu() {
-        const btn = document.getElementById('menu-button');
-        const menu = document.getElementById('mobile-menu');
-        const links = document.querySelectorAll('.mobile-link');
+    // Cleanup de listeners previos para evitar duplicados
+    const cleanup = (window as any)._menuCleanup;
+    if (cleanup) cleanup();
 
-        if (btn && menu) {
-            // 1. Toggle al hacer clic en el hamburguesa
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-            });
+    const btn = document.getElementById("menu-button");
+    const menu = document.getElementById("mobile-menu");
+    const links = document.querySelectorAll(".mobile-link");
 
-            // 2. CERRAR al hacer clic en cualquier enlace
-            links.forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.add('hidden');
-                });
-            });
-        }
+    function toggleMenu() {
+        if (menu) menu.classList.toggle("hidden");
     }
 
-    // Se ejecuta al cargar la página
-    initMenu();
+    function closeMenu() {
+        if (menu) menu.classList.add("hidden");
+    }
 
-    // 💡 Crucial: Se vuelve a ejecutar cuando Astro cambia de página con ClientRouter
-    document.addEventListener('astro:page-load', initMenu);
+    if (btn && menu) {
+        btn.addEventListener("click", toggleMenu);
+
+        links.forEach((link) => {
+            link.addEventListener("click", closeMenu);
+        });
+
+        // Guardar cleanup function
+        (window as any)._menuCleanup = () => {
+            btn.removeEventListener("click", toggleMenu);
+            links.forEach((link) =>
+                link.removeEventListener("click", closeMenu),
+            );
+        };
+    }
 </script>

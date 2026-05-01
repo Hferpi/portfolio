@@ -1,0 +1,93 @@
+---
+import { Image } from "astro:assets";
+import { currentSkills, skills } from "../data/skills";
+---
+
+<!-- Hero Section -->
+    <main id="hero" class="relative overflow-hidden px-6 pt-3 pb-6 lg:pt-8 lg:pb-32">
+        <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Columna Izquierda: Texto -->
+            <div class="order-2 lg:order-1 text-center lg:text-left space-y-6">
+                <h1
+                    class="text-4xl md:text-6xl font-black tracking-tight text-white leading-tight"
+                >
+                    Un junior <span class="text-cyan-400">a la deriva </span>
+                </h1>
+
+                <div
+                    class="space-y-4 text-lg text-slate-400 max-w-2xl mx-auto lg:mx-0"
+                >
+                    <p>
+                        Pasé de coordinar equipos en el sector industrial a
+                        crear mi primera aplicación para resolver problemas
+                        reales.
+                    </p>
+                    <p>
+                        Actualmente, como <span
+                            class="text-slate-100 font-semibold"
+                            >desarrollador Full Stack</span
+                        >, fusiono la pragmática industrial con la innovación
+                        digital.
+                    </p>
+                </div>
+
+                <!-- Skills Row -->
+                <div class="pt-6">
+                    <p
+                        class="text-sm font-mono text-cyan-500 mb-4 tracking-widest uppercase"
+                    >
+                        Tecnologías que uso actualmente:
+                    </p>
+                    <div
+                        class="flex flex-wrap justify-center lg:justify-start gap-5"
+                    >
+                        {
+                            currentSkills.map((skill) => (
+                                <i
+                                    class={`devicon-${skill.icon}  text-3xl hover:scale-125 transition-transform cursor-help`}
+                                    title={skill.name}
+                                />
+                            ))
+                        }
+                    </div>
+                </div>
+                <div class="pt-6">
+                    <p
+                        class="text-sm font-mono text-cyan-500 mb-4 tracking-widest uppercase"
+                    >
+                        Tecnologías usadas:
+                    </p>
+                    <div
+                        class="flex flex-wrap justify-center lg:justify-start gap-5"
+                    >
+                        {
+                            skills.map((skill) => (
+                                <i
+                                    class={`devicon-${skill.icon}  text-3xl hover:scale-125 transition-transform cursor-help`}
+                                    title={skill.name}
+                                />
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Foto -->
+            <div class="order-1 lg:order-2 flex justify-center">
+                <div class="relative group perspective-[1000px]">
+                    <!-- Efecto de resplandor de fondo -->
+                    <div
+                        class="absolute -inset-1 bg-linear-to-r from-cyan-500 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"
+                    >
+                    </div>
+                    <Image
+                        class="relative rounded-full w-48 h-48 md:w-70 md:h-70 object-cover border-4 border-slate-900 shadow-2xl transition-transform duration-500 group-hover:[transform:rotateY(15deg)]"
+                        src="/me.webp"
+                        alt="Foto de perfil"
+                        width={280}
+                        height={280}
+                    />
+                </div>
+            </div>
+        </div>
+    </main>

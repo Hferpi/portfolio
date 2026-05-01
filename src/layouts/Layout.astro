@@ -1,23 +1,51 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonical?: string;
+}
+
+const { title, description, ogImage, ogType = 'website', canonical } = Astro.props;
+const site = Astro.site ? Astro.site.toString() : 'https://hferpi.com';
+const url = canonical ? new URL(canonical, site).toString() : new URL(Astro.url.pathname, site).toString();
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title}</title>
+		{description && <meta name="description" content={description} />}
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<link rel="canonical" href={url} />
+
+		<meta property="og:title" content={title} />
+		<meta property="og:url" content={url} />
+		<meta property="og:type" content={ogType} />
+		{description && <meta property="og:description" content={description} />}
+		{ogImage && <meta property="og:image" content={new URL(ogImage, site).toString()} />}
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		{description && <meta name="twitter:description" content={description} />}
+		{ogImage && <meta name="twitter:image" content={new URL(ogImage, site).toString()} />}
+
+		<link rel="icon" type="image/webp" href="/icon.webp" />
+		<link rel="apple-touch-icon" href="/icon.webp" />
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+		<ClientRouter />
 	</head>
-	<body>
+	<body class="bg-gray-900 text-white grid grid-rows-[auto_1fr_auto] font-['Roboto']">
+		<Header />
 		<slot />
+		<Footer />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

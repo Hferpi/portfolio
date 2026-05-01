@@ -1,0 +1,87 @@
+---
+const currentYear = new Date().getFullYear();
+
+const navLinks = [
+    { name: "Inicio", href: "/" },
+    { name: "Proyectos", href: "/#proyectos" }, // Asumiendo que usas id en tu Home
+    { name: "Sobre mí", href: "/about" },
+];
+
+const socialLinks = [
+    { name: "GitHub", href: "https://github.com/Hferpi", icon: "devicon-github-original" },
+    { name: "LinkedIn", href: "https://www.linkedin.com/in/hector-fern%C3%A1ndez-piquer-90026a165/", icon: "devicon-linkedin-plain" },
+];
+---
+
+<footer class="bg-slate-950 border-t border-slate-800 pt-16 pb-8">
+    <div class="max-w-6xl mx-auto px-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            
+            <!-- Columna 1: Branding -->
+            <div class="space-y-4">
+                <h2 class="text-white font-bold text-xl flex items-center gap-2">
+                    <span class="text-cyan-500 font-mono">/</span>
+                    Un junior a la deriva
+                </h2>
+                <p class="text-slate-400 text-sm leading-relaxed max-w-xs">
+                    Toda solución pasa por entender el problema.
+                </p>
+            </div>
+
+            <!-- Columna 2: Navegación -->
+            <div class="space-y-4">
+                <h3 class="font-mono text-cyan-500 text-xs uppercase tracking-widest font-bold">Navegación</h3>
+                <ul class="space-y-2">
+                    {navLinks.map(link => (
+                        <li>
+                            <a href={link.href} class="text-slate-300 hover:text-cyan-400 transition-colors text-sm">
+                                {link.name}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <!-- Columna 3: Contacto y Social -->
+            <div class="space-y-4">
+                <h3 class="font-mono text-cyan-500 text-xs uppercase tracking-widest font-bold">Hablemos</h3>
+                <a href="mailto:hferpi@gmail.com" class="block text-slate-300 hover:text-white transition-colors text-sm">
+                    hferpi@gmail.com
+                </a>
+                <div class="flex gap-4 pt-2">
+                    {socialLinks.map(social => (
+                        <a href={social.href} target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-400 transition-all transform hover:-translate-y-1">
+                            <i class={`${social.icon} text-2xl`}></i>
+                            <span class="sr-only">{social.name}</span>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra inferior: Copyright y Built with -->
+        <div class="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-slate-500">
+            <p>
+                © {currentYear} — Héctor Fernández Piquer
+            </p>
+            <p class="flex items-center gap-2">
+                Hecho con 
+                <span class="text-cyan-600">
+                    <i class="devicon-astro-plain"></i> Astro
+                </span>
+                y 
+                <span class="text-cyan-600">
+                    <i class="devicon-tailwindcss-original"></i> Tailwind v4
+                </span>
+            </p>
+        </div>
+    </div>
+</footer>
+
+<style>
+    /* Aseguramos que el footer use la fuente mono para los detalles */
+    .font-mono {
+        font-family: 'IBM Plex Mono', monospace;
+    }
+</style>

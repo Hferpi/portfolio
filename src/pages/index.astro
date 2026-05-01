@@ -1,11 +1,129 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import { skills, currentSkills } from "../data/skills";
+import Hero from "../components/Hero.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const projects = await getCollection("projects");
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+    title="Un Junior a la Deriva | Full Stack Developer"
+    description="Portfolio de Héctor Fernández Piquer, desarrollador web Full Stack Junior. Proyectos personales, habilidades técnicas y experiencia en desarrollo de aplicaciones industriales."
+    ogImage="/logo.webp"
+>
+    <Hero />
+
+    <!-- Projects Section -->
+    <section
+        id="projects"
+        class="px-6 py-12 max-w-6xl mx-auto"
+        aria-label="Proyectos realizados"
+    >
+        <h2 class="text-2xl font-bold mb-10 flex items-center gap-4">
+            <span class="h-px w-12 bg-cyan-500"></span>
+            Proyectos Destacados
+        </h2>
+
+        <div class="grid gap-8 md:grid-cols-2">
+            {
+                projects.map((project) => {
+                    const { id, data } = project;
+                    const { title, description, technologies, img, urls } =
+                        data;
+
+                    return (
+                        <article class="group bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all hover:shadow-[0_0_30px_-10px_rgba(6,182,212,0.2)]">
+                            <div class="aspect-video overflow-hidden">
+                                <a href={`/projects/${id}`}>
+                                    <Image
+                                        class="w-full h-full object-cover"
+                                        src={img}
+                                        alt={title}
+                                        width={800}
+                                        height={450}
+                                        transition:name={`img-${id}`}
+                                    />
+                                </a>
+                            </div>
+
+                            <div class="p-6 space-y-4">
+                                <div class="flex justify-between items-start">
+                                    <h3
+                                        class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors"
+                                        transition:name={`title-${id}`}
+                                    >
+                                        {title}
+                                    </h3>
+                                    <div class="flex gap-3">
+                                        {urls.repo && (
+                                            <a
+                                                aria-label={`ver código de ${title}`}
+                                                href={urls.repo}
+                                                target="_blank"
+                                                class="text-slate-400 hover:text-white transition-colors"
+                                                title="Ver código"
+                                            >
+                                                <i class="devicon-github-original text-2xl" />
+                                            </a>
+                                        )}
+                                        {urls.live && (
+                                            <a
+                                                aria-label={`ver demo de ${title}`}
+                                                title="Ver demo"
+                                                href={urls.live}
+                                                target="_blank"
+                                                class="text-slate-400 hover:text-cyan-400 transition-colors"
+                                            >
+                                                <svg
+                                                    width="24"
+                                                    height="24"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                >
+                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                    <polyline points="15 3 21 3 21 9" />
+                                                    <line
+                                                        x1="10"
+                                                        y1="14"
+                                                        x2="21"
+                                                        y2="3"
+                                                    />
+                                                </svg>
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <p class="text-slate-400 text-sm leading-relaxed line-clamp-3">
+                                    {description}
+                                </p>
+
+                                <div class="flex flex-wrap gap-2">
+                                    {technologies.map((tech) => (
+                                        <span class="bg-slate-800 text-cyan-400 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded border border-slate-700">
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <a
+                                    title="Ver detalles del proyecto"
+                                    href={`/projects/${id}`}
+                                    class="inline-block pt-2 text-sm font-medium text-cyan-500 hover:text-cyan-400 underline underline-offset-4"
+                                >
+                                    Más detalles →
+                                </a>
+                            </div>
+                        </article>
+                    );
+                })
+            }
+        </div>
+    </section>
 </Layout>

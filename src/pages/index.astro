@@ -1,9 +1,8 @@
 ---
-import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import { skills, currentSkills } from "../data/skills";
 import Hero from "../components/Hero.astro";
+import Layout from "../layouts/Layout.astro";
 
 const projects = await getCollection("projects");
 ---
@@ -11,7 +10,7 @@ const projects = await getCollection("projects");
 <Layout
     title="Un Junior a la Deriva | Full Stack Developer"
     description="Portfolio de Héctor Fernández Piquer, desarrollador web Full Stack Junior. Proyectos personales, habilidades técnicas y experiencia en desarrollo de aplicaciones industriales."
-    ogImage="/logo.webp"
+    ogImage="/me.webp"
 >
     <Hero />
 

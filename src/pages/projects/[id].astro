@@ -29,7 +29,7 @@ const { Content } = await render(project);
 >
 <div class="flex gap-12 p-10 flex-col md:flex-row">
   <aside>
-    <a href="/#projects" class="mb-4 inline-block">← Volver</a>
+    <a href={`/#projects-${id}`} class="mb-4 inline-block">← Volver</a>
     <Image src={img} alt={title} width={672} height={378} class="w-full md:max-w-2xl h-auto rounded-lg" transition:name={`img-${id}`} />
     
   </aside>

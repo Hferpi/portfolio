@@ -72,32 +72,29 @@ import { Image } from "astro:assets";
 </header>
 
 <script>
-    // Esta función encapsula toda la lógica del menú
-    const setupMenu = () => {
+    // Usamos una sola función que se encargue de todo
+    function initMobileMenu() {
         const btn = document.getElementById("menu-button");
         const menu = document.getElementById("mobile-menu");
         const links = document.querySelectorAll(".mobile-link");
 
-        // Función para cerrar
-        const closeMenu = () => menu?.classList.add("hidden");
-        // Función para conmutar
-        const toggleMenu = () => menu?.classList.toggle("hidden");
+        if (!btn || !menu) return;
 
-        if (btn && menu) {
-            // Quitamos cualquier listener previo por si acaso (aunque astro:page-load suele bastar)
-            btn.removeEventListener("click", toggleMenu);
-            btn.addEventListener("click", toggleMenu);
+        // Función para abrir/cerrar
+        const toggle = () => menu.classList.toggle("hidden");
+        
+        // Función para cerrar (cuando se hace click en un link)
+        const close = () => menu.classList.add("hidden");
 
-            links.forEach((link) => {
-                link.removeEventListener("click", closeMenu);
-                link.addEventListener("click", closeMenu);
-            });
-        }
-    };
+        // Limpiamos listeners por seguridad y los añadimos
+        btn.removeEventListener("click", toggle);
+        btn.addEventListener("click", toggle);
 
-    // 1. Se ejecuta en la carga inicial
-    setupMenu();
+        links.forEach((link) => {
+            link.removeEventListener("click", close);
+            link.addEventListener("click", close);
+        });
+    }
 
-    // 2. Se ejecuta CADA VEZ que cambias de página gracias al ClientRouter
-    document.addEventListener("astro:page-load", setupMenu);
+    document.addEventListener("astro:page-load", initMobileMenu);
 </script>

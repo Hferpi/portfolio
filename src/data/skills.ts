@@ -16,6 +16,7 @@ export const skills: Skill[] = [
   { icon: "supabase-plain colored", name: "Supabase" },
   { icon: "vercel-original", name: "Vercel" },
   { icon: "vitejs-plain colored", name: "Vite" },
+  { icon: "astro-plain colored", name: "Astro" },
 ];
 
 export const currentSkills: Skill[] = [
@@ -24,7 +25,6 @@ export const currentSkills: Skill[] = [
   { icon: "nestjs-original colored", name: "NestJS" },
   { icon: "postgresql-plain colored", name: "PostgreSQL" },
   { icon: "tailwindcss-original colored", name: "TailwindCSS" },
-  { icon: "astro-plain colored", name: "Astro" },
   { icon: "react-original colored", name: "React" },
   { icon: "docker-plain colored", name: "Docker" },
 ];

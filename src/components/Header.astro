@@ -29,23 +29,40 @@ import { Image } from "astro:assets";
     <nav class="hidden md:block">
         <ul class="flex gap-7 items-center">
             <li>
+                <span
+                    class="group inline-flex items-center gap-2 text-slate-400 cursor-not-allowed"
+                    aria-disabled="true"
+                >
+                    <span>TFG</span>
+                    <span
+                        class="text-[8px] font-semibold uppercase tracking-wide bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full"
+                    >
+                        Coming Soon
+                    </span>
+                </span>
+            </li>
+            <li>
                 <a class="hover:underline hover:decoration-cyan-400" href="/"
-                    >Home</a>
+                    >Home</a
+                >
             </li>
             <li>
                 <a
                     class="hover:underline hover:decoration-cyan-400"
-                    href="/#projects">Projects</a>
+                    href="/#projects">Projects</a
+                >
             </li>
             <li>
                 <a
                     class="hover:underline hover:decoration-cyan-400"
-                    href="/about">About</a>
+                    href="/about">About</a
+                >
             </li>
             <li class="bg-slate-500 hover:bg-cyan-800 px-4 py-2 rounded-lg">
                 <a
                     href="https://www.linkedin.com/in/hector-fernandez-piquer"
-                    target="_blank">¿Conectamos?</a>
+                    target="_blank">¿Conectamos?</a
+                >
             </li>
         </ul>
     </nav>
@@ -56,6 +73,19 @@ import { Image } from "astro:assets";
         class="hidden absolute top-full left-0 right-0 bg-slate-700 border-b-2 border-slate-400 md:hidden z-50"
     >
         <ul class="flex flex-col gap-4 p-4">
+            <li>
+                <span
+                    class="mobile-link block py-2 group items-center gap-2 text-slate-400 cursor-not-allowed"
+                    aria-disabled="true"
+                >
+                    <span>TFG</span>
+                    <span
+                        class="text-[8px] font-semibold uppercase tracking-wide bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full"
+                    >
+                        Coming Soon
+                    </span>
+                </span>
+            </li>
             <li><a class="mobile-link block py-2" href="/">Home</a></li>
             <li>
                 <a class="mobile-link block py-2" href="/#projects">Projects</a>
@@ -65,7 +95,8 @@ import { Image } from "astro:assets";
                 <a
                     class="mobile-link block py-2"
                     href="https://www.linkedin.com/in/hector-fernandez-piquer"
-                    >¿Conectamos?</a>
+                    >¿Conectamos?</a
+                >
             </li>
         </ul>
     </nav>
@@ -82,7 +113,7 @@ import { Image } from "astro:assets";
 
         // Función para abrir/cerrar
         const toggle = () => menu.classList.toggle("hidden");
-        
+
         // Función para cerrar (cuando se hace click en un link)
         const close = () => menu.classList.add("hidden");
 

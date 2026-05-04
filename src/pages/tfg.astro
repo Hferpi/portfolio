@@ -16,11 +16,11 @@ import { Image } from "astro:assets";
                     class="font-mono text-cyan-500 text-sm tracking-widest uppercase"
                     >02. Trabajo de Fin de Grado</span
                 >
-                <div class="flex gap-2 mt-1">
-                    <h1 class="text-5xl font-black text-white mt-2">
+                <div class="flex gap-2 mt-2">
+                    <h1 class="text-5xl font-black text-white">
                         Decidim
                     </h1><Image
-                        src="/decidim-icon.webp"
+                        src="/tfg/decidim-icon.webp"
                         alt="Decidim Icon"
                         width={60}
                         height={60}
@@ -32,50 +32,76 @@ import { Image } from "astro:assets";
             <div class="grid md:grid-cols-[1fr_250px] gap-12 items-start">
                 <div class="space-y-6 text-lg text-slate-400 leading-relaxed">
                     <p>
-                        Mi camino en el mundo del software no es el habitual.
-                        Durante una década, mi entorno fueron las plantas
-                        industriales y la logística del <span
-                            class="text-white font-medium"
-                            >sector de la madera</span
-                        >.
+                        Mi Trabajo de Fin de Grado consiste en el desarrollo de
+                        una plataforma digital de participación orientada al
+                        <span class="text-cyan-400">ámbito educativo</span>,
+                        diseñada para trasladar al entorno online un proceso tan
+                        cotidiano y necesario como la votación. El sistema
+                        permite organizar consultas, encuestas y votaciones por
+                        categorías, facilitando que centros educativos de
+                        cualquier nivel —desde colegios e institutos hasta
+                        universidades, ciclos formativos o escuelas infantiles—
+                        puedan <span class="text-white font-medium"
+                            >gestionar sus procesos participativos de forma
+                            centralizada y accesible.</span
+                        >
                     </p>
 
                     <p>
-                        Pasé de mover materiales a <span class="text-cyan-400"
-                            >coordinar equipos</span
-                        >. Fue allí donde descubrí mi verdadera vocación:
-                        detecté ineficiencias en los procesos diarios y, por
-                        iniciativa propia, desarrollé mi primera aplicación para
-                        automatizarlos. Esa necesidad de solucionar problemas
-                        reales mediante la tecnología me llevó a dar el salto
-                        definitivo.
+                        La plataforma incorpora un sistema de votación flexible
+                        que permite elegir entre <span
+                            class="text-white font-medium"
+                            >voto completamente anónimo</span
+                        > o un modelo de <span class="text-white font-medium"
+                            >voto verificable mediante identificador cifrado</span
+                        >, donde cada usuario puede comprobar posteriormente que
+                        su voto no ha sido alterado sin comprometer la
+                        privacidad del proceso. De esta forma se combinan
+                        transparencia, seguridad y confianza dentro del sistema.
                     </p>
-
                     <blockquote
                         class="border-l-4 border-cyan-500 pl-6 py-2 my-8 bg-slate-900/50 italic text-slate-300"
                     >
-                        "No solo escribo código; entiendo el negocio desde la
-                        base para crear herramientas que realmente aporten valor
-                        a quienes las usan."
+                        "Transformando el voto educativo en un proceso digital,
+                        seguro y transparente."
                     </blockquote>
 
                     <p>
-                        Recientemente finalicé mi formación en <span
-                            class="text-white">Desarrollo Web</span
-                        > con un <span
-                            class="text-cyan-400 font-bold underline decoration-2 underline-offset-4"
-                            >Expediente de Excelencia (Nota > 9)</span
-                        >, mi visión es seguir creciendo y aprendiendo. <span
-                            class="text-lime-500"
-                            >Interesado en la ciberseguridad</span
+                        Además, el proyecto implementa una arquitectura de <span
+                            class="text-cyan-400">roles y permisos</span
+                        > para adaptar cada votación a su contexto real. Existen perfiles
+                        diferenciados para alumnos, profesores, padres, asociaciones
+                        AMPA y administradores, permitiendo restringir la participación
+                        según el tipo de consulta. Esto hace posible, por ejemplo,
+                        <span class="text-white font-medium"
+                            >crear votaciones exclusivas para docentes,
+                            encuestas dirigidas únicamente a familias o
+                            decisiones generales abiertas a toda la comunidad
+                            educativa.</span
                         >
+                    </p>
+
+                    <p>
+                        Como complemento, la plataforma ofrece <span
+                            class="text-white font-medium"
+                            >gráficas y visualización de resultados en tiempo
+                            real</span
+                        >, proporcionando una representación clara e intuitiva
+                        de la participación y del resultado de cada proceso. El
+                        objetivo final del proyecto es modernizar la toma de
+                        decisiones en entornos educativos, haciendo la
+                        <span class="text-cyan-400"
+                            >participación más accesible, organizada y
+                            transparente</span
+                        >
+                        para todos sus integrantes.
                     </p>
                 </div>
 
-                <!-- Foto / Perfil Lateral -->
+                <!-- LOGO / Lenguajes -->
                 <aside class="space-y-8">
                     <Image
-                        src="/decidim.webp"
+                        src="/tfg/decidim.webp"
                         alt="Decidim logo"
                         width={250}
                         height={250}
@@ -87,45 +113,90 @@ import { Image } from "astro:assets";
                             Lenguajes y Tecnologías
                         </p>
                         <div class="mt-1 flex gap-2">
-                            <i class="devicon-typescript-plain colored text-2xl " />
-                            <i class="devicon-nestjs-plain colored text-2xl " />
-                            <i class="devicon-nuxtjs-plain colored text-2xl " />
-
+                            <i class="devicon-typescript-plain colored text-2xl"
+                            ></i>
+                            <i class="devicon-nestjs-plain colored text-2xl"
+                            ></i>
+                            <i class="devicon-nuxtjs-plain colored text-2xl"
+                            ></i>
+                            <i class="devicon-docker-plain colored text-2xl"
+                            ></i>
+                            <i class="devicon-postgresql-plain colored text-2xl"
+                            ></i>
                         </div>
 
                         <p class="text-cyan-500 font-bold uppercase pt-4">
-                            Educación
+                            Usos
                         </p>
-                        <p class="text-slate-400">
-                            Desarrollo de Aplicaciones Web (Exp. Excelencia)
-                        </p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Institutos</li>
+                            <li>Universidades</li>
+                            <li>Colegios</li>
+                        </ul>
                     </div>
+                    <!-- TODO: Add images -->
+                    <Image
+                        src="/decidim.webp"
+                        alt="Decidim logo"
+                        width={250}
+                        height={250}
+                        class="rounded-xl grayscale hover:grayscale-0 transition duration-500 border border-slate-800 object-cover greyscale w-full h-auto"
+                    />
+
+                    <Image
+                        src="/decidim.webp"
+                        alt="Decidim logo"
+                        width={250}
+                        height={250}
+                        class="rounded-xl grayscale hover:grayscale-0 transition duration-500 border border-slate-800 object-cover greyscale w-full h-auto"
+                    />
                 </aside>
             </div>
 
-            <!-- Sección de Habilidades Transversales (Tu ventaja competitiva) -->
+            <!-- ---------------------------------- -->
             <section class="mt-24">
                 <div
                     class="bg-slate-900/30 border border-slate-800 rounded-3xl p-8 md:p-12"
                 >
                     <h2 class="text-3xl font-bold text-white mb-8">
-                        Por qué mi perfil es <span class="text-cyan-500"
-                            >diferente</span
-                        >
+                        Cosas que hacen <span class="text-cyan-500"
+                            >interesante</span
+                        > el proyecto
                     </h2>
 
+                    <!-- ------------------------------------------FRONTEND------------------------------------------ -->
                     <div class="grid md:grid-cols-2 gap-8">
+                        <h2
+                            class="text-white font-bold md:col-span-2 text-xl flex items-center gap-2"
+                        >
+                            <span class="text-cyan-500 font-mono">/</span>
+                            FRONTEND
+                        </h2>
                         <div class="space-y-4">
                             <h3
                                 class="font-mono text-xl text-slate-200 flex items-center gap-2"
                             >
-                                <span class="text-cyan-500">_</span> Mentalidad Industrial
+                                <span class="text-cyan-500">_</span> Nuxt
                             </h3>
-                            <p class="text-slate-400">
-                                10 años en logística me han enseñado que un
-                                error en el proceso cuesta dinero. Aplico esa
-                                misma rigurosidad al backend y a la arquitectura
-                                de software.
+                            <p class="text-slate-400 text-sm">
+                                De todos los frameworks que he probado, <span
+                                    class="text-white font-medium">Nuxt</span
+                                > es de mis favoritos. Su estructura clara, los <span
+                                    class="text-white font-medium"
+                                    >autoimports</span
+                                > y el <span class="text-white font-medium"
+                                    >routing automático</span
+                                > hacen que desarrollar con él sea cómodo, rápido
+                                y ordenado.
+                            </p>
+
+                            <p class="text-slate-400 text-sm">
+                                Además, su integración con Vue y el uso de
+                                directivas como <span
+                                    class="text-white font-medium">v-if</span
+                                > y <span class="text-white font-medium"
+                                    >v-for</span
+                                > me gusta mucho.
                             </p>
                         </div>
 
@@ -133,39 +204,220 @@ import { Image } from "astro:assets";
                             <h3
                                 class="font-mono text-xl text-slate-200 flex items-center gap-2"
                             >
-                                <span class="text-cyan-500">_</span> Trabajo en equipo
+                                <span class="text-cyan-500">_</span> Componentes
                             </h3>
-                            <p class="text-slate-400">
-                                Gracias a trabjar con equipos, sé lo que
-                                significa el compañerismo y la responsabilidad.
-                                Me integro fácilmente en células de desarrollo
-                                aportando calma y soluciones.
+                            <p class="text-slate-400 text-sm">
+                                He elegido <span class="text-white font-medium"
+                                    >Magic UI</span
+                                > como librería de componentes preconstruidos que
+                                me ha ayudado a crear
+                                <span class="text-white font-medium"
+                                    >interfaces modernas y atractivas</span
+                                > sin tener que escribir código desde cero.
                             </p>
                         </div>
+                        <div class="space-y-4">
+                            <h3
+                                class="font-mono text-xl text-slate-200 flex items-center gap-2"
+                            >
+                                <span class="text-cyan-500">_</span> Middleware
+                            </h3>
+                            <p class="text-slate-400 text-sm">
+                                Durante el desarrollo de este proyecto he
+                                aprendido a utilizar el sistema de <span
+                                    class="text-white font-medium"
+                                    >middleware de Nuxt</span
+                                > para gestionar la autenticación y proteger rutas
+                                . Gracias a ello, validar el estado del usuario antes
+                                de cada navegación, redirigir automáticamente cuando
+                                no existe sesión activa y evitar llamadas innecesarias
+                                al backend.
+                            </p>
+                        </div>
+                        <div class="space-y-4">
+                            <h3
+                                class="font-mono text-xl text-slate-200 flex items-center gap-2"
+                            >
+                                <span class="text-cyan-500">_</span> Gráficos
+                            </h3>
+                            <p class="text-slate-400 text-sm">
+                                Para tener gráficos he usado la librería <span
+                                    class="text-white font-medium"
+                                    >Chart.js</span
+                                > es la elegida porque no pesaba mucho y era fácil
+                                de integrar. El unificar los datos para pintar y enviarlos
+                                del <span class="text-white font-medium"
+                                    >backend</span
+                                > me ha parecido una tarea interesante.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ------------------------------------------BACKEND------------------------------------------ -->
+                    <div class="grid md:grid-cols-2 gap-8 mt-14">
+                        <h2
+                            class="text-white font-bold md:col-span-2 text-xl flex items-center gap-2"
+                        >
+                            <span class="text-cyan-500 font-mono">/</span>
+                            BACKEND
+                        </h2>
+                        <div class="space-y-4">
+                            <h3
+                                class="font-mono text-xl text-slate-200 flex items-center gap-2"
+                            >
+                                <span class="text-cyan-500">_</span> NestJS
+                            </h3>
+                            <p class="text-slate-400 text-sm">
+                                El framework elegido para el backend ha sido <span
+                                    class="text-white font-medium">NestJS</span
+                                >, principalmente por su enfoque estructurado y
+                                escalable. Su arquitectura basada en <span
+                                    class="text-white font-medium"
+                                    >módulos, controladores y servicios</span
+                                > me ha parecido muy organizada y fácil de mantener.
+                            </p>
+
+                            <p class="text-slate-400 text-sm">
+                                Además, su forma de trabajar con TypeScript y su
+                                filosofía modular hacen que el crecimiento de la
+                                aplicación sea más controlado y mantenible, lo
+                                que ha sido clave en el desarrollo de este TFG.
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h3
+                                class="font-mono text-xl text-slate-200 flex items-center gap-2"
+                            >
+                                <span class="text-cyan-500">_</span> Consultas BBDD
+                            </h3>
+                            <p class="text-slate-400 text-sm">
+                                Para la gestión de la base de datos he utilizado <span
+                                    class="text-white font-medium">TypeORM</span
+                                >, con un enfoque orientado a entidades. He
+                                podido definir de forma organizada cómo se
+                                almacenan y relacionan los datos dentro del
+                                sistema.
+                            </p>
+
+                            <p class="text-slate-400 text-sm">
+                                Este enfoque ha facilitado la interacción con la
+                                base de datos, simplificando las consultas y
+                                operaciones <span class="text-white font-medium"
+                                    >CRUD</span
+                                >.
+                            </p>
+                        </div>
+                        <div class="space-y-4">
+                            <h3
+                                class="font-mono text-xl text-slate-200 flex items-center gap-2"
+                            >
+                                <span class="text-cyan-500">_</span> Protección de
+                                rutas
+                            </h3>
+                            <p class="text-slate-400 text-sm">
+                                En el backend también he trabajado con <span
+                                    class="text-white font-medium"
+                                    >guards de NestJS</span
+                                > para la protección de rutas, aplicando control de
+                                acceso en función del estado del usuario y su rol
+                                dentro del sistema. A través de <span
+                                    class="text-white font-medium"
+                                    >@UseGuards()</span
+                                > he podido restringir el acceso a determinadas funcionalidades
+                                según permisos específicos.
+                            </p>
+
+                            <p class="text-slate-400 text-sm">
+                                Además, mediante el uso de <span
+                                    class="text-white font-medium"
+                                    >decoradores</span
+                                > he definido roles de forma clara en cada endpoint,
+                                lo que me ha permitido implementar una gestión de
+                                permisos más organizada y mantenible dentro de la
+                                aplicación.
+                            </p>
+                        </div>
+                        <div class="space-y-4">
+                            <h3
+                                class="font-mono text-xl text-slate-200 flex items-center gap-2"
+                            >
+                                <span class="text-cyan-500">_</span> Tratar los datos
+                            </h3>
+                            <p class="text-slate-400 text-sm">
+                                Otro aspecto clave del backend ha sido la
+                                correcta definición de <span
+                                    class="text-white font-medium"
+                                    >interfaces y enums</span
+                                > utilizando TypeScript. Gracias a ello, distintos
+                                estados y roles del sistema quedan bien definidos,
+                                facilitando el mantenimiento y la escalabilidad del
+                                proyecto.
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="mt-10 flex flex-col gap-4 justify-center w-full items-center"
+                    >
+                        <h2
+                            class="text-white font-bold md:col-span-2 text-xl flex items-center gap-2"
+                        >
+                            <span class="text-cyan-500 font-mono">/</span>
+                            TYPESCRIPT
+                        </h2>
+                        <p class="text-slate-400 text-md text-center">
+                            He utilizado TypeScript en todo el proyecto me
+                            parece un lenguaje muy potente, facilita el
+                            mantenimiento. <span class="text-white font-medium"
+                                >Su tipado estático</span
+                            > permite capturar errores en tiempo de desarrollo.
+                        </p>
+                    </div>
+                    <div
+                        class="mt-10 flex flex-col gap-4 justify-center w-full items-center"
+                    >
+                        <h2
+                            class="text-white font-bold md:col-span-2 text-xl flex items-center gap-2"
+                        >
+                            <span class="text-cyan-500 font-mono">/</span>
+                            USO DE LA IA
+                        </h2>
+                        <p class="text-slate-400 text-md text-center">
+                            He utilizado la IA como herramienta de apoyo en el
+                            desarrollo del proyecto. Me ha ayudado a
+                            <span class="text-white font-medium"
+                                >generar código, a documentar el proyecto y a
+                                resolver problemas</span
+                            >. En estos tiempos <span
+                                class="text-white font-medium"
+                                >no usarla es sinonimo de quedarse atras</span
+                            > y no aprovechar las herramientas que tenemos a nuestra
+                            disposición.
+                        </p>
                     </div>
                 </div>
             </section>
         </div>
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Person",
+                name: "Héctor Fernández Piquer",
+                jobTitle: "Full Stack Developer Junior",
+                url: "https://hferpi.com",
+                image: "https://hferpi.com/logo.webp",
+                address: {
+                    "@type": "PostalAddress",
+                    addressLocality: "Vinaròs",
+                    addressRegion: "Castellón",
+                },
+                knowsAbout: [
+                    "Desarrollo Web",
+                    "Full Stack",
+                    "Logística Industrial",
+                ],
+            })}
+        />
     </main>
-    <script
-        type="application/ld+json"
-        set:html={JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Person",
-            name: "Héctor Fernández Piquer",
-            jobTitle: "Full Stack Developer Junior",
-            url: "https://hferpi.com",
-            image: "https://hferpi.com/logo.webp",
-            address: {
-                "@type": "PostalAddress",
-                addressLocality: "Vinaròs",
-                addressRegion: "Castellón",
-            },
-            knowsAbout: [
-                "Desarrollo Web",
-                "Full Stack",
-                "Logística Industrial",
-            ],
-        })}
-    />
 </Layout>

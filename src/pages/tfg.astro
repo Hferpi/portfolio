@@ -46,12 +46,12 @@ const features = [
 
 const socialLinks = [
     {
-        name: "Frontend",
+        name: "FRONTEND",
         href: "https://github.com/Hferpi/decidim_frontend",
         icon: "devicon-github-original",
     },
     {
-        name: "Backend",
+        name: "BACKEND",
         href: "https://github.com/Hferpi/decidim_backend",
         icon: "devicon-github-original",
     },
@@ -156,28 +156,6 @@ const socialLinks = [
                             <li>Universidades</li>
                             <li>Colegios</li>
                         </ul>
-                        <p class="text-cyan-500 font-bold uppercase pt-4">
-                            Repo
-                        </p>
-                        <ul class="space-y-3">
-                            {
-                                socialLinks.map((social) => (
-                                    <li>
-                                        <a
-                                            href={social.href}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="text-slate-400 hover:text-cyan-400 transition-all transform hover:-translate-y-1 flex items-center gap-2"
-                                        >
-                                            <i
-                                                class={`${social.icon} text-xl`}
-                                            />
-                                            <span>{social.name}</span>
-                                        </a>
-                                    </li>
-                                ))
-                            }
-                        </ul>
                     </div>
                 </aside>
             </div>
@@ -228,13 +206,21 @@ const socialLinks = [
             </h2>
 
             <!-- ------------------------------------------FRONTEND------------------------------------------ -->
-            <div class="grid md:grid-cols-2 gap-15">
-                <h2
-                    class="text-white font-bold md:col-span-2 text-xl flex items-center gap-2"
+            <h2
+                class="font-bold md:col-span-2 text-xl flex items-center gap-2 my-10"
+            >
+                <span class="text-cyan-500 font-mono">/</span>
+                <a
+                    href={socialLinks[0].href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-slate-300 hover:text-cyan-400 transition-all transform hover:-translate-y-1 flex items-center gap-2"
                 >
-                    <span class="text-cyan-500 font-mono">/</span>
-                    FRONTEND
-                </h2>
+                    <span>{socialLinks[0].name}</span>
+                    <i class={`${socialLinks[0].icon} text-xl`}></i>
+                </a>
+            </h2>
+             <div class="grid md:grid-cols-2 gap-18">
                 <div class="space-y-4">
                     <h3
                         class="font-mono text-xl text-slate-200 flex items-center gap-2"
@@ -320,13 +306,21 @@ const socialLinks = [
             </div>
 
             <!-- ------------------------------------------BACKEND------------------------------------------ -->
-            <div class="grid md:grid-cols-2 gap-15 mt-14">
-                <h2
-                    class="text-white font-bold md:col-span-2 text-xl flex items-center gap-2"
+            <h2
+                class="font-bold md:col-span-2 text-xl flex items-center gap-2 my-10"
+            >
+                <span class="text-cyan-500 font-mono">/</span>
+                <a
+                    href={socialLinks[1].href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-slate-300 hover:text-cyan-400 transition-all transform hover:-translate-y-1 flex items-center gap-2"
                 >
-                    <span class="text-cyan-500 font-mono">/</span>
-                    BACKEND
-                </h2>
+                    <span>{socialLinks[1].name}</span>
+                    <i class={`${socialLinks[1].icon} text-xl`}></i>
+                </a>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-18">
                 <div class="space-y-4">
                     <h3
                         class="font-mono text-xl text-slate-200 flex items-center gap-2"

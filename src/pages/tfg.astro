@@ -43,6 +43,19 @@ const features = [
         videoAlt: "Visualización de gráficas y resultados",
     },
 ];
+
+const socialLinks = [
+    {
+        name: "Frontend",
+        href: "https://github.com/Hferpi/decidim_frontend",
+        icon: "devicon-github-original",
+    },
+    {
+        name: "Backend",
+        href: "https://github.com/Hferpi/decidim_backend",
+        icon: "devicon-github-original",
+    },
+];
 ---
 
 <Layout
@@ -116,7 +129,7 @@ const features = [
                         alt="Decidim logo"
                         width={250}
                         height={250}
-                        class="rounded-xl grayscale hover:grayscale-0 transition duration-500 border border-slate-800 object-cover greyscale w-full h-auto"
+                        class="rounded-xl md:grayscale hover:grayscale-0 transition duration-500 border border-slate-800 object-cover w-full h-auto"
                     />
 
                     <div class="font-mono text-sm space-y-2">
@@ -135,7 +148,6 @@ const features = [
                             <i class="devicon-postgresql-plain colored text-2xl"
                             ></i>
                         </div>
-
                         <p class="text-cyan-500 font-bold uppercase pt-4">
                             Usos
                         </p>
@@ -143,6 +155,28 @@ const features = [
                             <li>Institutos</li>
                             <li>Universidades</li>
                             <li>Colegios</li>
+                        </ul>
+                        <p class="text-cyan-500 font-bold uppercase pt-4">
+                            Repo
+                        </p>
+                        <ul class="space-y-3">
+                            {
+                                socialLinks.map((social) => (
+                                    <li>
+                                        <a
+                                            href={social.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="text-slate-400 hover:text-cyan-400 transition-all transform hover:-translate-y-1 flex items-center gap-2"
+                                        >
+                                            <i
+                                                class={`${social.icon} text-xl`}
+                                            />
+                                            <span>{social.name}</span>
+                                        </a>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </div>
                 </aside>
@@ -184,7 +218,7 @@ const features = [
         <!-- Puedes seguir copiando la estructura para el creador de encuestas y las estadísticas -->
     </main>
     <!-- ---------------------------------- -->
-    <section class="mt-24 px-12">
+    <section class="my-18 px-12">
         <div
             class="bg-slate-900/30 border border-slate-800 rounded-3xl p-8 md:p-12"
         >
@@ -207,7 +241,9 @@ const features = [
                     >
                         <span class="text-cyan-500">__</span> Nuxt
                     </h3>
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm ">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         De todos los frameworks que he probado, <span
                             class="text-white font-medium">Nuxt</span
                         > es de mis favoritos. Su estructura clara, los <span
@@ -217,7 +253,9 @@ const features = [
                         > hacen que desarrollar con él sea cómodo, rápido y ordenado.
                     </p>
 
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm ">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         Además, su integración con Vue y el uso de directivas
                         como <span class="text-white font-medium">v-if</span> y <span
                             class="text-white font-medium">v-for</span
@@ -231,7 +269,9 @@ const features = [
                     >
                         <span class="text-cyan-500">__</span> Componentes
                     </h3>
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         He elegido <span class="text-white font-medium"
                             >Magic UI</span
                         > como librería de componentes preconstruidos que me ha ayudado
@@ -247,7 +287,9 @@ const features = [
                     >
                         <span class="text-cyan-500">__</span> Middleware
                     </h3>
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm ">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         Durante el desarrollo de este proyecto he aprendido a
                         utilizar el sistema de <span
                             class="text-white font-medium"
@@ -264,7 +306,9 @@ const features = [
                     >
                         <span class="text-cyan-500">__</span> Gráficos
                     </h3>
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm ">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         Para tener gráficos he usado la librería <span
                             class="text-white font-medium">Chart.js</span
                         > es la elegida porque no pesaba mucho y era fácil de integrar.
@@ -289,7 +333,9 @@ const features = [
                     >
                         <span class="text-cyan-500">__</span> NestJS
                     </h3>
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         El framework elegido para el backend ha sido <span
                             class="text-white font-medium">NestJS</span
                         >, principalmente por su enfoque estructurado y
@@ -299,7 +345,9 @@ const features = [
                         > me ha parecido muy organizada y fácil de mantener.
                     </p>
 
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         Además, su forma de trabajar con TypeScript y su
                         filosofía modular hacen que el crecimiento de la
                         aplicación sea más controlado y mantenible, lo que ha
@@ -313,7 +361,9 @@ const features = [
                     >
                         <span class="text-cyan-500">__</span> Consultas BBDD
                     </h3>
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         Para la gestión de la base de datos he utilizado <span
                             class="text-white font-medium">TypeORM</span
                         >, con un enfoque orientado a entidades. He podido
@@ -321,7 +371,9 @@ const features = [
                         relacionan los datos dentro del sistema.
                     </p>
 
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         Este enfoque ha facilitado la interacción con la base de
                         datos, simplificando las consultas y operaciones <span
                             class="text-white font-medium">CRUD</span
@@ -334,7 +386,9 @@ const features = [
                     >
                         <span class="text-cyan-500">__</span> Protección de rutas
                     </h3>
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         En el backend también he trabajado con <span
                             class="text-white font-medium"
                             >guards de NestJS</span
@@ -346,7 +400,9 @@ const features = [
                         según permisos específicos.
                     </p>
 
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         Además, mediante el uso de <span
                             class="text-white font-medium">decoradores</span
                         > he definido roles de forma clara en cada endpoint, lo que
@@ -360,7 +416,9 @@ const features = [
                     >
                         <span class="text-cyan-500">__</span> Tratar los datos
                     </h3>
-                    <p class="text-justify leading-relaxed text-slate-400 text-sm">
+                    <p
+                        class="text-justify leading-relaxed text-slate-400 text-sm"
+                    >
                         Otro aspecto clave del backend ha sido la correcta
                         definición de <span class="text-white font-medium"
                             >interfaces y enums</span
@@ -379,7 +437,7 @@ const features = [
                     <span class="text-cyan-500 font-mono">/</span>
                     TYPESCRIPT
                 </h2>
-                <p class=" leading-relaxed text-slate-400 text-md text-center">
+                <p class="leading-relaxed text-slate-400 text-md text-center">
                     He utilizado TypeScript en todo el proyecto me parece un
                     lenguaje muy potente, facilita el mantenimiento. <span
                         class="text-white font-medium">Su tipado estático</span
@@ -395,7 +453,7 @@ const features = [
                     <span class="text-cyan-500 font-mono">/</span>
                     USO DE LA IA
                 </h2>
-                <p class=" leading-relaxed text-slate-400 text-md text-center">
+                <p class="leading-relaxed text-slate-400 text-md text-center">
                     He utilizado la IA como herramienta de apoyo en el
                     desarrollo del proyecto. Me ha ayudado a
                     <span class="text-white font-medium"

@@ -5,11 +5,118 @@ import Hero from "../components/Hero.astro";
 import Layout from "../layouts/Layout.astro";
 
 const projects = await getCollection("projects");
+
+type Category = "saas" | "web" | "mobile" | "automation";
+
+type Theme = {
+    label: string;
+    badge: string;
+    tagline: string;
+    icon: string;
+    iconWrap: string;
+    countPill: string;
+    accentLine: string;
+    cardHover: string;
+    titleHover: string;
+    badgeChip: string;
+    tag: string;
+    link: string;
+    panelBorder: string;
+    rgb: string;
+};
+
+const themes: Record<Category, Theme> = {
+    saas: {
+        label: "Aplicaciones & SaaS",
+        badge: "SaaS",
+        tagline:
+            "SaaS completos con base de datos, seguridad y despliegue en la nube (AWS, Railway, Supabase).",
+        icon: `<path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" /><path d="M2 20h20" /><path d="M9 8h6" /><path d="M9 11h4" />`,
+        iconWrap: "bg-cyan-500/10 border-cyan-500/30 text-cyan-400",
+        countPill: "text-cyan-300 bg-cyan-500/10 border border-cyan-500/20",
+        accentLine: "bg-cyan-500",
+        cardHover:
+            "hover:border-cyan-500/50 hover:shadow-[0_0_40px_-12px_rgba(6,182,212,0.35)]",
+        titleHover: "group-hover:text-cyan-400",
+        badgeChip: "text-cyan-300 border-cyan-500/40 bg-slate-950/80",
+        tag: "text-cyan-300/90 border-slate-700",
+        link: "text-cyan-500 hover:text-cyan-400",
+        panelBorder: "border-cyan-500/20",
+        rgb: "6,182,212",
+    },
+    web: {
+        label: "Páginas Web",
+        badge: "Web",
+        tagline:
+            "Landings rápidas y elegantes con SEO, formularios y despliegue con dominio y DNS propios.",
+        icon: `<circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18" />`,
+        iconWrap: "bg-violet-500/10 border-violet-500/30 text-violet-400",
+        countPill: "text-violet-300 bg-violet-500/10 border border-violet-500/20",
+        accentLine: "bg-violet-500",
+        cardHover:
+            "hover:border-violet-500/50 hover:shadow-[0_0_40px_-12px_rgba(139,92,246,0.35)]",
+        titleHover: "group-hover:text-violet-400",
+        badgeChip: "text-violet-300 border-violet-500/40 bg-slate-950/80",
+        tag: "text-violet-300/90 border-slate-700",
+        link: "text-violet-400 hover:text-violet-300",
+        panelBorder: "border-violet-500/20",
+        rgb: "139,92,246",
+    },
+    mobile: {
+        label: "Apps Móviles",
+        badge: "Móvil",
+        tagline:
+            "Desarrollo nativo con React Native, integración de IA y publicación en la Play Store.",
+        icon: `<rect x="7" y="2" width="10" height="20" rx="2" /><path d="M11 18h2" />`,
+        iconWrap: "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
+        countPill:
+            "text-emerald-300 bg-emerald-500/10 border border-emerald-500/20",
+        accentLine: "bg-emerald-500",
+        cardHover:
+            "hover:border-emerald-500/50 hover:shadow-[0_0_40px_-12px_rgba(16,185,129,0.35)]",
+        titleHover: "group-hover:text-emerald-400",
+        badgeChip: "text-emerald-300 border-emerald-500/40 bg-slate-950/80",
+        tag: "text-emerald-300/90 border-slate-700",
+        link: "text-emerald-400 hover:text-emerald-300",
+        panelBorder: "border-emerald-500/20",
+        rgb: "16,185,129",
+    },
+    automation: {
+        label: "Automatizaciones",
+        badge: "Automatización",
+        tagline:
+            "Flujos con n8n, IA y Docker que eliminan tareas manuales y ahorran horas de trabajo.",
+        icon: `<circle cx="12" cy="12" r="3" /><path d="M12 2v4" /><path d="M12 18v4" /><path d="M4.9 4.9l2.8 2.8" /><path d="M16.3 16.3l2.8 2.8" /><path d="M2 12h4" /><path d="M18 12h4" /><path d="M4.9 19.1l2.8-2.8" /><path d="M16.3 7.7l2.8-2.8" />`,
+        iconWrap: "bg-amber-500/10 border-amber-500/30 text-amber-400",
+        countPill: "text-amber-300 bg-amber-500/10 border border-amber-500/20",
+        accentLine: "bg-amber-500",
+        cardHover:
+            "hover:border-amber-500/50 hover:shadow-[0_0_40px_-12px_rgba(245,158,11,0.35)]",
+        titleHover: "group-hover:text-amber-400",
+        badgeChip: "text-amber-300 border-amber-500/40 bg-slate-950/80",
+        tag: "text-amber-300/90 border-slate-700",
+        link: "text-amber-400 hover:text-amber-300",
+        panelBorder: "border-amber-500/20",
+        rgb: "245,158,11",
+    },
+};
+
+const order: Category[] = ["saas", "web", "mobile", "automation"];
+
+function makeSparkles(count: number) {
+    return Array.from({ length: count }, () => ({
+        top: +(Math.random() * 100).toFixed(2),
+        left: +(Math.random() * 100).toFixed(2),
+        size: +(2 + Math.random() * 2).toFixed(2),
+        delay: +(Math.random() * 5).toFixed(2),
+        dur: +(2.5 + Math.random() * 3).toFixed(2),
+    }));
+}
 ---
 
 <Layout
-    title="Un Junior a la Deriva | Full Stack Developer"
-    description="Portfolio de Héctor Fernández Piquer, desarrollador web Full Stack Junior. Proyectos personales, habilidades técnicas y experiencia en desarrollo de aplicaciones industriales."
+    title="Ya no tan a la deriva | Full Stack Developer"
+    description="Portfolio de Héctor Fernández Piquer, desarrollador web Full Stack mid-level. Proyectos personales, habilidades técnicas y experiencia en desarrollo de aplicaciones industriales. Abierto a nuevos proyectos."
     ogImage="/logo.webp"
 >
     <Hero />
@@ -17,112 +124,226 @@ const projects = await getCollection("projects");
     <!-- Projects Section -->
     <section
         id="projects"
-        class="px-6 py-12 max-w-6xl mx-auto"
+        class="scroll-mt-24 px-5 sm:px-6 py-12 max-w-6xl mx-auto"
         aria-label="Proyectos realizados"
     >
-        <h2 class="text-2xl font-bold mb-10 flex items-center gap-4">
+        <h2 class="text-2xl font-bold mb-3 flex items-center gap-4">
             <span class="h-px w-12 bg-cyan-500"></span>
             Proyectos Destacados
         </h2>
+        <p class="text-slate-400 text-sm mb-12 sm:mb-14 max-w-2xl leading-relaxed">
+            Me defiendo en cuatro ámbitos: aplicaciones y SaaS, páginas web,
+            apps móviles publicadas en tiendas y automatizaciones. Estos son
+            algunos de los proyectos con los que lo demuestro.
+        </p>
 
-        <div class="grid gap-8 md:grid-cols-2">
+        <div class="space-y-16 sm:space-y-20">
             {
-                projects.map((project) => {
-                    const { id, data } = project;
-                    const { title, description, technologies, img, urls } =
-                        data;
+                order.map((categoryId) => {
+                    const theme = themes[categoryId];
+                    const items = projects.filter(
+                        (p) => p.data.category === categoryId,
+                    );
+
+                    if (items.length === 0) return null;
 
                     return (
-                        <article class="group bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all hover:shadow-[0_0_30px_-10px_rgba(6,182,212,0.2)]">
-                            <div class="aspect-video overflow-hidden">
-                                <a id={`projects-${id}`} href={`/projects/${id}`}>
-                                    <Image
-                                        class="w-full h-full object-cover"
-                                        src={img}
-                                        alt={title}
-                                        width={800}
-                                        height={450}
-                                        transition:name={`img-${id}`}
+                        <div
+                            class={`neon-border relative scroll-mt-24 rounded-3xl border p-5 sm:p-8 ${theme.panelBorder}`}
+                            style={`--neon-rgb: ${theme.rgb}; background-color: rgba(${theme.rgb},0.04); background-image: radial-gradient(rgba(${theme.rgb},0.22) 1px, transparent 1px); background-size: 18px 18px;`}
+                        >
+                            <div
+                                class="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-3xl"
+                                aria-hidden="true"
+                            >
+                                {makeSparkles(34).map((s) => (
+                                    <span
+                                        class="sparkle absolute rounded-full"
+                                        style={`top:${s.top}%; left:${s.left}%; width:${s.size}px; height:${s.size}px; background: rgba(${theme.rgb},0.95); box-shadow: 0 0 6px 1px rgba(${theme.rgb},0.75); animation-delay:${s.delay}s; animation-duration:${s.dur}s;`}
                                     />
-                                </a>
+                                ))}
                             </div>
 
-                            <div class="p-6 space-y-4">
-                                <div class="flex justify-between items-start">
-                                    <h3
-                                        class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors"
-                                        transition:name={`title-${id}`}
-                                    >
-                                        {title}
-                                    </h3>
-                                    <div class="flex gap-3">
-                                        {urls.repo && (
-                                            <a
-                                                aria-label={`ver código de ${title}`}
-                                                href={urls.repo}
-                                                target="_blank"
-                                                class="text-slate-400 hover:text-white transition-colors"
-                                                title="Ver código"
-                                            >
-                                                <i class="devicon-github-original text-2xl" />
-                                            </a>
-                                        )}
-                                        {urls.live && (
-                                            <a
-                                                aria-label={`ver demo de ${title}`}
-                                                title="Ver demo"
-                                                href={urls.live}
-                                                target="_blank"
-                                                class="text-slate-400 hover:text-cyan-400 transition-colors"
-                                            >
-                                                <svg
-                                                    width="24"
-                                                    height="24"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="2"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                >
-                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                                    <polyline points="15 3 21 3 21 9" />
-                                                    <line
-                                                        x1="10"
-                                                        y1="14"
-                                                        x2="21"
-                                                        y2="3"
-                                                    />
-                                                </svg>
-                                            </a>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <p class="text-slate-400 text-sm leading-relaxed line-clamp-3">
-                                    {description}
-                                </p>
-
-                                <div class="flex flex-wrap gap-2">
-                                    {technologies.map((tech) => (
-                                        <span class="bg-slate-800 text-cyan-400 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded border border-slate-700">
-                                            {tech}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <a
-                                    title="Ver detalles del proyecto"
-                                    href={`/projects/${id}`}
-                                    class="inline-block pt-2 text-sm font-medium text-cyan-500 hover:text-cyan-400 underline underline-offset-4"
+                            <div class="relative z-10 flex items-start gap-4 mb-7 sm:mb-8">
+                                <span
+                                    class={`shrink-0 grid place-items-center w-11 h-11 rounded-xl border ${theme.iconWrap}`}
                                 >
-                                    Más detalles →
-                                </a>
+                                    <svg
+                                        width="22"
+                                        height="22"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        set:html={theme.icon}
+                                    />
+                                </span>
+                                <div>
+                                    <h3 class="text-lg sm:text-xl font-bold text-white flex items-center gap-3">
+                                        {theme.label}
+                                        <span
+                                            class={`text-xs font-semibold px-2 py-0.5 rounded-full ${theme.countPill}`}
+                                        >
+                                            {items.length}
+                                        </span>
+                                    </h3>
+                                    <p class="text-slate-400 text-sm mt-1.5 max-w-xl leading-relaxed">
+                                        {theme.tagline}
+                                    </p>
+                                </div>
                             </div>
-                        </article>
+
+                            <div class="relative z-10 flex flex-col gap-6">
+                                {items.map((project) => {
+                                    const { id, data } = project;
+                                    const {
+                                        title,
+                                        description,
+                                        technologies,
+                                        img,
+                                        urls,
+                                    } = data;
+
+                                    return (
+                                        <article
+                                            class={`group flex flex-row bg-slate-900/85 border border-slate-800 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 ${theme.cardHover}`}
+                                        >
+                                            <div class="relative overflow-hidden shrink-0 self-start ml-4 my-4 h-24 w-24 rounded-xl sm:self-stretch sm:ml-0 sm:my-0 sm:h-auto sm:w-64 lg:w-80 sm:rounded-none">
+                                                <a
+                                                    class="block h-full"
+                                                    id={`projects-${id}`}
+                                                    href={`/projects/${id}`}
+                                                >
+                                                    <Image
+                                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                        src={img}
+                                                        alt={title}
+                                                        width={800}
+                                                        height={450}
+                                                        transition:name={`img-${id}`}
+                                                    />
+                                                </a>
+                                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                                                <span
+                                                    class={`hidden sm:block absolute top-3 left-3 text-[10px] uppercase tracking-wider font-bold backdrop-blur px-2 py-1 rounded-md border ${theme.badgeChip}`}
+                                                >
+                                                    {theme.badge}
+                                                </span>
+                                            </div>
+
+                                            <div class="min-w-0 flex-1 p-4 sm:p-6 space-y-3 sm:space-y-4">
+                                                <div class="flex justify-between items-start gap-3">
+                                                    <h4
+                                                        class={`text-lg sm:text-xl font-bold text-white transition-colors ${theme.titleHover}`}
+                                                        transition:name={`title-${id}`}
+                                                    >
+                                                        {title}
+                                                    </h4>
+                                                    <div class="flex gap-3 shrink-0">
+                                                        {urls.repo && (
+                                                            <a
+                                                                aria-label={`ver código de ${title}`}
+                                                                href={urls.repo}
+                                                                target="_blank"
+                                                                class="text-slate-400 hover:text-white transition-colors"
+                                                                title="Ver código"
+                                                            >
+                                                                <i class="devicon-github-original text-2xl" />
+                                                            </a>
+                                                        )}
+                                                        {urls.live && (
+                                                            <a
+                                                                aria-label={`ver demo de ${title}`}
+                                                                title="Ver demo"
+                                                                href={urls.live}
+                                                                target="_blank"
+                                                                class="text-slate-400 hover:text-white transition-colors"
+                                                            >
+                                                                <svg
+                                                                    width="24"
+                                                                    height="24"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="2"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                >
+                                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                                    <polyline points="15 3 21 3 21 9" />
+                                                                    <line
+                                                                        x1="10"
+                                                                        y1="14"
+                                                                        x2="21"
+                                                                        y2="3"
+                                                                    />
+                                                                </svg>
+                                                            </a>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <p class="text-slate-400 text-sm leading-relaxed line-clamp-3">
+                                                    {description}
+                                                </p>
+
+                                                <div class="flex flex-wrap gap-2">
+                                                    {technologies.map((tech) => (
+                                                        <span
+                                                            class={`bg-slate-800/80 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded border ${theme.tag}`}
+                                                        >
+                                                            {tech}
+                                                        </span>
+                                                    ))}
+                                                </div>
+
+                                                <a
+                                                    title="Ver detalles del proyecto"
+                                                    href={`/projects/${id}`}
+                                                    class={`inline-block pt-1 text-sm font-medium underline underline-offset-4 ${theme.link}`}
+                                                >
+                                                    Más detalles →
+                                                </a>
+                                            </div>
+                                        </article>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     );
                 })
             }
         </div>
     </section>
 </Layout>
+
+<style>
+    .sparkle {
+        opacity: 0;
+        animation-name: sparkle-twinkle;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        will-change: opacity, transform;
+    }
+
+    @keyframes sparkle-twinkle {
+        0%,
+        100% {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .sparkle {
+            animation: none;
+            opacity: 0.5;
+        }
+    }
+</style>

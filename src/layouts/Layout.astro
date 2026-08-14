@@ -42,6 +42,23 @@ const url = canonical ? new URL(canonical, site).toString() : new URL(Astro.url.
 		<link rel="apple-touch-icon" href="/icon.webp" />
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 		<ClientRouter />
+		<script is:inline>
+			// Registro global de la propiedad animable del borde neón.
+			// Persiste en el documento aunque el DOM se intercambie en cada
+			// View Transition (por eso no se usa @property en CSS scopeado).
+			try {
+				if (window.CSS && CSS.registerProperty) {
+					CSS.registerProperty({
+						name: "--neon-angle",
+						syntax: "<angle>",
+						inherits: false,
+						initialValue: "0deg",
+					});
+				}
+			} catch (e) {
+				/* ya registrada: no-op */
+			}
+		</script>
 	</head>
 	<body class="bg-gray-900 text-white grid grid-rows-[auto_1fr_auto] font-['Roboto']">
 		<Header />

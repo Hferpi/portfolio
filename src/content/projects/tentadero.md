@@ -1,6 +1,7 @@
 ---
 title: "Tentadero"
 description: "Web elegante para un restaurante local"
+category: "web"
 technologies: ["React", "Tailwind CSS", "SEO"]
 img: "/projects/tentadero.webp"
 urls:

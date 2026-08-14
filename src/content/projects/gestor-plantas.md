@@ -1,6 +1,7 @@
 ---
 title: "Gestor de plantas"
 description: "SaaS para gestionar plantas"
+category: "saas"
 technologies: ["React", "Vite", "Tailwind CSS", "Supabase", "PostgreSQL", "Prisma"]
 img: "/projects/ginartoleas.webp"
 urls:

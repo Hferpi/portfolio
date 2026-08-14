@@ -1,6 +1,7 @@
 ---
 title: "Car history tracker"
 description: "Sistema de gestión de historial de reàraciones con IA de vehículos"
+category: "saas"
 technologies: ["PHP","IA", "Laravel", "AWS", "SQLite", "Prisma", "Bcrypt"]
 img: "/projects/car-history.webp"
 urls:

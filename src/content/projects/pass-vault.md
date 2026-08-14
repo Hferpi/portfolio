@@ -1,6 +1,7 @@
 ---
 title: "Pass Vault Safe"
 description: "Sistema de gestión de contraseñas"
+category: "saas"
 technologies: ["Next.js", "Tailwind CSS", "Supabase", "MongoDB", "Prisma", "Bcrypt"]
 img: "/projects/pass-vault.webp"
 urls:

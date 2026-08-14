@@ -1,6 +1,7 @@
 ---
 title: "Palet Tracker"
 description: "Web para gestionar palets de carga"
+category: "saas"
 technologies: ["React", "Vite", "Tailwind CSS", "Supabase", "PostgreSQL", "Prisma"]
 img: "/projects/palet-tracker.webp"
 urls:

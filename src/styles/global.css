@@ -12,3 +12,49 @@ html {
     font-style: normal;
     font-display: swap;
 }
+
+/*
+ * Borde neón reutilizable: un arco de luz recorre el perímetro.
+ * Color por elemento vía `--neon-rgb` (ej. "6,182,212"). Cae a cian por defecto.
+ * `--neon-angle` se registra por JS (CSS.registerProperty) en el Layout para
+ * que sobreviva a las View Transitions.
+ * El elemento debe estar posicionado (relative/absolute) y con border-radius.
+ */
+@keyframes neon-border-spin {
+    to {
+        --neon-angle: 360deg;
+    }
+}
+
+.neon-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(
+        from var(--neon-angle),
+        rgba(var(--neon-rgb, 34, 211, 238), 0) 0deg,
+        rgba(var(--neon-rgb, 34, 211, 238), 0) 255deg,
+        rgba(var(--neon-rgb, 34, 211, 238), 0.7) 315deg,
+        rgba(var(--neon-rgb, 34, 211, 238), 1) 345deg,
+        rgba(var(--neon-rgb, 34, 211, 238), 0) 360deg
+    );
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    filter: drop-shadow(0 0 3px rgba(var(--neon-rgb, 34, 211, 238), 0.8));
+    animation: neon-border-spin 4s linear infinite;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .neon-border::before {
+        animation: none;
+    }
+}

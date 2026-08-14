@@ -1,6 +1,7 @@
 ---
 title: "Tecno soporte"
 description: "Flujo de n8n para automatización emails, con paneles de control"
+category: "automation"
 technologies: ["n8n", "Automatización", "IA", "API", "Docker", "PostgreSQL", "React"]
 img: "/projects/tecno-soporte.webp"
 urls:

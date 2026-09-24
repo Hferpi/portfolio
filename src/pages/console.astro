@@ -1,0 +1,818 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+    title="Console | Héctor Fernández Piquer"
+    description="Terminal interactiva de la zona de ciberseguridad del portfolio de Héctor Fernández Piquer."
+    ogImage="/logo.webp"
+>
+    <section class="px-3 sm:px-5 py-5 w-full">
+        <div class="term" id="term" role="group" aria-label="Terminal interactiva">
+            <div class="term-bar">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span class="term-title">user@console: ~</span>
+            </div>
+            <div class="term-body" id="term-body" tabindex="0">
+                <div id="term-output"></div>
+                <div class="term-input-line" id="term-input-line" hidden>
+                    <span class="term-prompt" id="term-prompt"></span>
+                    <input
+                        id="term-input"
+                        class="term-input"
+                        type="text"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        aria-label="Entrada de comandos"
+                    />
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 text-center text-xs text-slate-500 font-['Share_Tech_Mono']">
+            Zona experimental de ciberseguridad · escribe <span class="text-green-400">help</span>
+        </p>
+    </section>
+</Layout>
+
+<style>
+    .term {
+        font-family: "Share Tech Mono", ui-monospace, monospace;
+        background: #060a06;
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        border-radius: 0.75rem;
+        overflow: hidden;
+        box-shadow:
+            0 0 40px -12px rgba(74, 222, 128, 0.35),
+            0 20px 50px -20px rgba(0, 0, 0, 0.8);
+    }
+
+    .term-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 0.9rem;
+        background: #0b120b;
+        border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+    }
+    .dot {
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 9999px;
+        display: inline-block;
+    }
+    .dot-red {
+        background: #ff5f57;
+    }
+    .dot-yellow {
+        background: #febc2e;
+    }
+    .dot-green {
+        background: #28c840;
+    }
+    .term-title {
+        margin-left: 0.5rem;
+        color: rgba(134, 239, 172, 0.65);
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+    }
+
+    .term-body {
+        height: min(84vh, 1100px);
+        overflow-y: auto;
+        padding: 1rem 1.1rem 1.4rem;
+        color: #4ade80;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        text-shadow: 0 0 6px rgba(74, 222, 128, 0.25);
+        outline: none;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(74, 222, 128, 0.4) transparent;
+    }
+    .term-body::-webkit-scrollbar {
+        width: 8px;
+    }
+    .term-body::-webkit-scrollbar-thumb {
+        background: rgba(74, 222, 128, 0.35);
+        border-radius: 9999px;
+    }
+
+    .term-body :global(.line) {
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    .term-body :global(.dim) {
+        color: rgba(74, 222, 128, 0.55);
+    }
+    .term-body :global(.bright) {
+        color: #bbf7d0;
+    }
+    .term-body :global(.accent) {
+        color: #22d3ee;
+    }
+    .term-body :global(.warn) {
+        color: #fbbf24;
+    }
+    .term-body :global(.err) {
+        color: #f87171;
+    }
+    .term-body :global(.u) {
+        color: #86efac;
+        font-weight: 700;
+    }
+    .term-body :global(.at) {
+        color: rgba(74, 222, 128, 0.7);
+    }
+    .term-body :global(.path) {
+        color: #22d3ee;
+    }
+    .term-body :global(a) {
+        color: #22d3ee;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .term-input-line {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+    .term-prompt {
+        white-space: nowrap;
+    }
+    .term-input {
+        flex: 1;
+        min-width: 0;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #bbf7d0;
+        caret-color: #4ade80;
+        font-family: inherit;
+        font-size: inherit;
+        text-shadow: inherit;
+        padding: 0;
+    }
+    /* Ocultar lo tecleado al pedir contraseña (como sudo) */
+    .term-input.masked {
+        color: transparent;
+        text-shadow: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .term-body {
+            text-shadow: none;
+        }
+    }
+</style>
+
+<script>
+    function initConsole() {
+        const term = document.getElementById("term");
+        if (!term || term.dataset.ready === "true") return;
+        term.dataset.ready = "true";
+
+        const body = document.getElementById("term-body")!;
+        const output = document.getElementById("term-output")!;
+        const inputLine = document.getElementById("term-input-line")!;
+        const promptEl = document.getElementById("term-prompt")!;
+        const input = document.getElementById("term-input") as HTMLInputElement;
+
+        // --- Identidad de sesión (usuario aleatorio) ---
+        const user = "user";
+        const host = String(Math.floor(1000 + Math.random() * 9000));
+
+        // --- Utilidades de salida ---
+        const esc = (s: string) =>
+            s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        // Escapa y convierte URLs en enlaces. El escapado va PRIMERO y el patrón
+        // excluye comillas/ángulos, así la URL no puede romper el atributo href.
+        const escLinkify = (s: string) =>
+            esc(s).replace(
+                /https?:\/\/[^\s"'<>]+/g,
+                (url) =>
+                    `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`,
+            );
+
+        const print = (html = "", cls = "") => {
+            const div = document.createElement("div");
+            div.className = "line" + (cls ? " " + cls : "");
+            div.innerHTML = html;
+            output.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        };
+        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+        const banner = () => {
+            print("╔══════════════════════════════════════╗", "accent");
+            print("║      HFERPI // SECURITY CONSOLE       ║", "accent");
+            print("╚══════════════════════════════════════╝", "accent");
+        };
+
+        const sessionCard = () => {
+            const now = new Date();
+            print(`Sesión iniciada · <span class="bright">${now.toLocaleString()}</span>`, "dim");
+            print(`Usuario: <span class="u">${user}</span><span class="at">@${host}</span>`);
+        };
+
+        // --- Sistema de ficheros virtual (árbol anidado) ---
+        type FSNode =
+            | { file: string; download?: string; copy?: string }
+            | { dir: Record<string, FSNode> };
+        const isDir = (
+            n: FSNode | undefined,
+        ): n is { dir: Record<string, FSNode> } => !!n && "dir" in n;
+
+        // Emojis con la flag oculta en caracteres invisibles (no tocar)
+        const EMOJI_PAYLOAD =
+            "😁‌‌‌‌‌‌‌‌‌‍‍‌‌‍‍‌‌‌‌‌‌‌‌‌‌‍‍‌‌‍‌‍‌‌‌‌‌‌‌‌‌‍‍‌‍‍‌‌‌‌‌‌‌‌‌‌‌‍‍‌‍‌‌‍‌‌‌‌‌‌‌‌‌‍‍‌‌‌‍‍‌‌‌‌‌‌‌‌‌‍‍‌‍‌‌‍‌‌‌‌‌‌‌‌‌‍‍‌‌‍‌‌‌‌‌‌‌‌‌‌‌‍‍‌‌‌‌‍‌‌‌‌‌‌‌‌‌‍‍‌‌‍‌‌‌‌‌‌‌‌‌‌‌‍‍‌‌‍‌‍🪃‌‌‌‌‌‌‌‌‌‍‍‍‌‌‍‍‌‌‌‌‌‌‌‌‌‌‍‌‍‍‌‍‌‌‌‌‌‌‌‌‌‍‍‌‍‌‌‌‌‌‌‌‌‌‌‌‌‍‍‍‌‍‌‍‌‌‌‌‌‌‌‌‌‍‍‌‍‍‍‌‌‌‌‌‌‌‌‌‌‍‍‍‌‍‌‌‌‌‌‌‌‌‌‌‌‍‍‌‌‍‌‍‌‌‌‌‌‌‌‌‌‍‍‍‌‌‍‌‌‌‌‌‌‌‌‌‌‌‍‌‍‍‌‍‌‌‌‌‌‌‌‌‌‌‍‍‌‌‍‍";
+
+        const fs: Record<string, FSNode> = {
+            home: {
+                dir: {
+                    user: {
+                        dir: {
+                            Descargas: {
+                                dir: {
+                                    "mala_practica_de_juniors.txt": {
+                                        file: '=== BOLETÍN DE SEGURIDAD · ARCHIVO ===\n\nTITULAR: "Antes de la IA, el enemigo era un console.log olvidado"\n\nDurante años, uno de los fallos más comunes de los desarrolladores\njunior fue dejar console.log() por todo el código que acababa en\nproducción. Lo que empezaba como una ayuda para depurar terminaba\nimprimiendo en la consola del navegador tokens de sesión, claves de\nAPI, respuestas enteras de la base de datos o datos personales de\nusuarios. Cualquiera con F12 abierto tenía una ventana directa a las\ntripas de la aplicación.\n\nEl problema nunca fue el console.log en sí, sino QUÉ se registraba y\nDÓNDE acababa. Un log de depuración es una fuga de información\nesperando a ocurrir: expone la lógica interna, facilita el trabajo a\nun atacante y, en el peor de los casos, filtra credenciales en texto\nplano.\n\nCASO REAL: en mayo de 2018, Twitter reconoció que un error hacía que\nlas contraseñas de sus usuarios se escribieran en un log interno en\nTEXTO PLANO antes de cifrarlas. Pidió a sus ~330 millones de usuarios\nque las cambiaran. Ese mismo año GitHub reportó un fallo similar, y en\n2019 Facebook admitió haber guardado cientos de millones de\ncontraseñas sin cifrar, accesibles desde dentro. Todos, variantes del\nmismo pecado: información sensible acabando en los logs.\n\nMORALEJA: la IA no te salva de esto. Revisa tus logs, no registres\nsecretos y limpia los console.log antes de desplegar.\n\n-- fin del archivo --',
+                                        download: "/49-comandos-linux.pdf",
+                                    },
+                                },
+                            },
+                            Documentos: {
+                                dir: {
+                                    "estenografia.txt": {
+                                        file:
+                                            "=== ESTEGANOGRAFÍA DE EMOJIS ===\n\nLa esteganografía de emojis es la práctica de ocultar mensajes\nsecretos dentro de secuencias de emojis aparentemente inocentes.\nEsta poderosa técnica permite esconder un mensaje en un emoji usando\ncaracteres Unicode invisibles, haciendo que la comunicación sea\nsegura e inconspicua.\n\nA simple vista solo ves una carita o un objeto. Detrás, una cadena de\ncaracteres de ancho cero viaja pegada al emoji: invisible para el ojo,\nintacta al copiar y pegar. Si buscas ocultar un mensaje en un emoji\npor razones de privacidad o seguridad, un descifrador de códigos de\nemojis hace que el proceso sea simple y efectivo.\n\nHerramienta: https://emoji-crypt.vercel.app/es\n\nMuestra interceptada:\n\n" +
+                                            EMOJI_PAYLOAD +
+                                            "\n\n(usa 'copy estenografia.txt' para copiarla entera al portapapeles)\n\nParece un par de emojis sin más. No lo es.\nDescifra lo que esconden y escribe aquí lo que encuentres.",
+                                        copy: EMOJI_PAYLOAD,
+                                    },
+                                    "notas.txt": {
+                                        file: "TODO:\n- Montar la sección de ciberseguridad\n- Primeros writeups / CTFs",
+                                    },
+                                    ".secret": {
+                                        file: "nota del admin — NO subir a git\nclave de root: hunter2\n(cambiarla algún día...)",
+                                    },
+                                },
+                            },
+                            Escritorio: {
+                                dir: {
+                                    "leeme.txt": {
+                                        file: "Bienvenido a la zona cyber de hferpi.\nAquí encontrarás apuntes y proyectos que vaya realizando. Es un entorno simulado dentro de la web y, si indagas... quién sabe si hay un easter egg 🥚",
+                                    },
+                                },
+                            },
+                            "Imágenes": {
+                                dir: {
+                                    "banner.jpg": { file: "" },
+                                    "perfil.png": { file: "" },
+                                },
+                            },
+                            "readme.txt": {
+                                file: "Consola experimental de ciberseguridad.\nEscribe 'help'.",
+                            },
+                            "skills.txt": {
+                                file: "Entorno principal: Linux\nMás skills de ciberseguridad en construcción...",
+                            },
+                        },
+                    },
+                },
+            },
+            mnt: {
+                dir: {
+                    G: {
+                        dir: {
+                            backups: { dir: {} },
+                            herramientas: { dir: {} },
+                        },
+                    },
+                },
+            },
+            root: {
+                dir: {
+                    "flag.txt": {
+                        file: "Has escalado a root. 🏴 (esto es una simulación)",
+                    },
+                    ".bash_history": { file: "whoami\nid\ncat /etc/shadow" },
+                },
+            },
+        };
+
+        const homePath = ["home", "user"];
+        let cwd = [...homePath];
+        let isRoot = false;
+        const homeSegs = () => (isRoot ? ["root"] : homePath);
+
+        const childrenAt = (path: string[]): Record<string, FSNode> | null => {
+            let cur: Record<string, FSNode> = fs;
+            for (const seg of path) {
+                const node = cur[seg];
+                if (!isDir(node)) return null;
+                cur = node.dir;
+            }
+            return cur;
+        };
+
+        const isBinary = (name: string) =>
+            /\.(png|jpe?g|gif|webp|pdf|zip|exe|bin)$/i.test(name);
+
+        const promptPath = () => {
+            const hp = homeSegs();
+            const underHome =
+                cwd.length >= hp.length && hp.every((s, i) => cwd[i] === s);
+            if (underHome) {
+                const rest = cwd.slice(hp.length);
+                return rest.length ? "~/" + rest.join("/") : "~";
+            }
+            return "/" + cwd.join("/");
+        };
+
+        const buildPrompt = () => {
+            const u = isRoot ? "root" : user;
+            const sign = isRoot ? "#" : "$";
+            const cls = isRoot ? "err" : "u";
+            return `<span class="${cls}">${u}</span><span class="at">@${host}</span><span class="path">:${promptPath()}${sign}</span>`;
+        };
+
+        const updatePrompt = () => {
+            promptEl.innerHTML = buildPrompt() + "&nbsp;";
+        };
+        updatePrompt();
+
+        // --- Comandos ---
+        const commands: Record<string, (args: string[]) => void> = {
+            help: () => {
+                print("Comandos disponibles:", "bright");
+                const list: [string, string][] = [
+                    ["help", "esta ayuda"],
+                    ["whoami", "identidad de sesión"],
+                    ["ls", "listar ficheros"],
+                    ["cd", "cd <dir> — entrar (cd .. / cd ~)"],
+                    ["pwd", "ruta actual"],
+                    ["cat", "cat <fichero> — leer un fichero"],
+                    ["copy", "copy <fichero> — copiar al portapapeles"],
+                    ["tree", "árbol de directorios"],
+                    ["mkdir", "mkdir <dir> — crear un directorio"],
+                    ["projects", "proyectos de ciberseguridad"],
+                    ["skills", "entorno / stack"],
+                    ["date", "fecha y hora actual"],
+                    ["banner", "reimprime la cabecera"],
+                    ["clear", "limpia la pantalla"],
+                    ["exit", "volver al portfolio"],
+                ];
+                list.forEach(([c, d]) =>
+                    print(`  <span class="u">${c.padEnd(10)}</span><span class="dim">${d}</span>`),
+                );
+            },
+            whoami: () => {
+                const u = isRoot ? "root" : user;
+                print(`<span class="${isRoot ? "err" : "u"}">${u}</span><span class="at">@${host}</span>`);
+                print(`Hora local: <span class="bright">${new Date().toLocaleTimeString()}</span>`, "dim");
+            },
+            projects: () => {
+                print("Proyectos de ciberseguridad:", "bright");
+                print("  (vacío) — en construcción. Próximamente. 🛠️", "dim");
+            },
+            skills: () => {
+                print("Entorno:", "bright");
+                print("  <span class='accent'>Linux</span>  <span class='dim'>· entorno principal</span>");
+                print("  más skills de ciberseguridad en construcción...", "dim");
+            },
+            date: () => print(new Date().toString(), "bright"),
+            banner: () => {
+                banner();
+                sessionCard();
+            },
+            clear: () => {
+                output.innerHTML = "";
+            },
+            ls: (args) => {
+                // -a / -la muestran también los ocultos (.dotfiles)
+                const all = args.some((a) => /^-\w*a/.test(a));
+                const here = childrenAt(cwd) || {};
+                const names = Object.keys(here)
+                    .filter((n) => all || !n.startsWith("."))
+                    .sort();
+                if (!names.length) return;
+                const entries = names.map((n) =>
+                    isDir(here[n])
+                        ? `<span class="accent">${esc(n)}/</span>`
+                        : `<span class="${n.startsWith(".") ? "dim" : "u"}">${esc(n)}</span>`,
+                );
+                print(entries.join("&nbsp;&nbsp;"));
+            },
+            cat: (args) => {
+                const name = args[0]?.replace(/\/$/, "");
+                if (!name) return print("uso: cat &lt;fichero&gt;", "dim");
+                const node = (childrenAt(cwd) || {})[name];
+                if (!node) return print(`cat: ${esc(name)}: no existe`, "err");
+                if (isDir(node))
+                    return print(`cat: ${esc(name)}: es un directorio`, "err");
+                if (isBinary(name))
+                    return print(`cat: ${esc(name)}: fichero binario`, "warn");
+                node.file.split("\n").forEach((l) => print(escLinkify(l)));
+                if (node.download) {
+                    print("");
+                    print(
+                        "psst... irónicamente, te he dejado algo en la consola del navegador (F12) 👀",
+                        "dim",
+                    );
+                    const url = new URL(node.download, location.origin).href;
+                    console.log(
+                        "%c👾 hferpi // security console",
+                        "color:#22c55e;font-weight:bold;font-size:15px;font-family:monospace",
+                    );
+                    console.log(
+                        "%cComo dice el archivo, dejar un console.log puede filtrar cosas...\nasí que aquí va mi regalo: mis 49 comandos de Linux 👇",
+                        "color:#4ade80;font-family:monospace;font-size:12px",
+                    );
+                    console.log(
+                        "%c" + url,
+                        "color:#22d3ee;font-family:monospace;font-size:13px",
+                    );
+                    confetti();
+                }
+            },
+            mkdir: (args) => {
+                const name = args[0];
+                if (!name) return print("uso: mkdir &lt;nombre&gt;", "dim");
+                const here = childrenAt(cwd) || {};
+                if (here[name])
+                    return print(`mkdir: no se puede crear '${esc(name)}': ya existe`, "err");
+                here[name] = { dir: {} };
+                print(`directorio creado: <span class="accent">${esc(name)}/</span>`, "dim");
+            },
+            copy: (args) => {
+                const name = args[0]?.replace(/\/$/, "");
+                if (!name) return print("uso: copy &lt;fichero&gt;", "dim");
+                const node = (childrenAt(cwd) || {})[name];
+                if (!node) return print(`copy: ${esc(name)}: no existe`, "err");
+                if (isDir(node))
+                    return print(`copy: ${esc(name)}: es un directorio`, "err");
+                const payload = node.copy ?? node.file;
+                if (!payload)
+                    return print(`copy: ${esc(name)}: nada que copiar`, "warn");
+                const ok = () =>
+                    print(
+                        `copiado al portapapeles: <span class="u">${esc(name)}</span>`,
+                        "bright",
+                    );
+                const fail = () =>
+                    print(
+                        "copy: el navegador bloqueó el portapapeles — selecciona el texto y copia a mano",
+                        "err",
+                    );
+                try {
+                    navigator.clipboard.writeText(payload).then(ok, fail);
+                } catch {
+                    fail();
+                }
+            },
+            cd: (args) => {
+                const target = args[0];
+                if (!target || target === "~") {
+                    cwd = [...homeSegs()];
+                    return updatePrompt();
+                }
+                if (target === "/") {
+                    cwd = [];
+                    return updatePrompt();
+                }
+                if (target === ".") return;
+                if (target === "..") {
+                    if (cwd.length) cwd.pop();
+                    return updatePrompt();
+                }
+                const name = target.replace(/\/$/, "");
+                const node = (childrenAt(cwd) || {})[name];
+                if (!node) return print(`cd: ${esc(target)}: no existe`, "err");
+                if (!isDir(node))
+                    return print(`cd: ${esc(target)}: no es un directorio`, "err");
+                cwd = [...cwd, name];
+                updatePrompt();
+            },
+            pwd: () => print("/" + cwd.join("/"), "bright"),
+            tree: (args) => {
+                const all = args.some((a) => /^-\w*a/.test(a));
+                let nDirs = 0;
+                let nFiles = 0;
+                print(`<span class="accent">${esc(promptPath())}</span>`);
+                const walk = (node: Record<string, FSNode>, prefix: string) => {
+                    const names = Object.keys(node)
+                        .filter((n) => all || !n.startsWith("."))
+                        .sort();
+                    names.forEach((n, i) => {
+                        const last = i === names.length - 1;
+                        const branch = last ? "└── " : "├── ";
+                        const child = node[n];
+                        if (isDir(child)) {
+                            nDirs++;
+                            print(`${prefix}${branch}<span class="accent">${esc(n)}/</span>`);
+                            walk(child.dir, prefix + (last ? "    " : "│   "));
+                        } else {
+                            nFiles++;
+                            print(
+                                `${prefix}${branch}<span class="${n.startsWith(".") ? "dim" : "u"}">${esc(n)}</span>`,
+                            );
+                        }
+                    });
+                };
+                walk(childrenAt(cwd) || {}, "");
+                print("");
+                print(`<span class="dim">${nDirs} directorios, ${nFiles} ficheros</span>`);
+            },
+            // Flag oculta en los emojis de ~/Documentos/estenografia.txt
+            "felicidades-hunter-3": () => {
+                confetti();
+                print(
+                    '<span class="warn">¡FLAG CORRECTA!</span> 🎉 Has descifrado el mensaje oculto.',
+                    "bright",
+                );
+                print(
+                    "Sabes mirar donde nadie mira. Eso es justo lo que hace falta aquí. 👾",
+                    "dim",
+                );
+            },
+            sudo: (args) => {
+                if (args[0] === "su") return startAuth(true);
+                print("uso: sudo su  ·  escalar a administrador (root)", "dim");
+            },
+            su: (args) => {
+                if (args[0] && args[0] !== "root")
+                    return print(`su: el usuario '${esc(args[0])}' no existe`, "err");
+                startAuth(true);
+            },
+            exit: () => {
+                if (isRoot) {
+                    isRoot = false;
+                    cwd = [...homePath];
+                    print("exit — sesión de root cerrada.", "dim");
+                    return updatePrompt();
+                }
+                print("Cerrando sesión...", "dim");
+                setTimeout(() => (window.location.href = "/#hero"), 600);
+            },
+        };
+
+        // --- Autenticación (sudo su) ---
+        const ROOT_PW = "hunter2"; // anotada en ~/Documentos/.secret
+        let awaitingPw = false;
+        let pwAttempts = 0;
+        const startAuth = (hint = false) => {
+            awaitingPw = true;
+            if (hint) print("(pulsa Esc o Ctrl+C para cancelar)", "dim");
+            promptEl.innerHTML = `[sudo] password for <span class="u">${user}</span>:&nbsp;`;
+            input.classList.add("masked");
+            input.value = "";
+            input.focus();
+        };
+        // Confetti de un solo disparo (canvas que se autodestruye ~2s → sin coste posterior)
+        const confetti = () => {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+                return;
+            const W = window.innerWidth;
+            const H = window.innerHeight;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const canvas = document.createElement("canvas");
+            canvas.style.cssText =
+                "position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:9999";
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            document.body.appendChild(canvas);
+            const ctx = canvas.getContext("2d")!;
+            ctx.scale(dpr, dpr);
+            const colors = ["#22c55e", "#4ade80", "#22d3ee", "#a7f3d0", "#eab308", "#ffffff"];
+            const parts = Array.from({ length: 150 }, () => ({
+                x: W / 2 + (Math.random() - 0.5) * W * 0.3,
+                y: H * 0.4,
+                vx: (Math.random() - 0.5) * 11,
+                vy: Math.random() * -13 - 4,
+                size: 4 + Math.random() * 6,
+                color: colors[(Math.random() * colors.length) | 0],
+                rot: Math.random() * Math.PI,
+                vr: (Math.random() - 0.5) * 0.3,
+            }));
+            const start = performance.now();
+            const DURATION = 2200;
+            const tick = (now: number) => {
+                const t = now - start;
+                ctx.clearRect(0, 0, W, H);
+                const life = Math.max(0, 1 - t / DURATION);
+                parts.forEach((p) => {
+                    p.vy += 0.35;
+                    p.vx *= 0.99;
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.rot += p.vr;
+                    ctx.save();
+                    ctx.globalAlpha = life;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rot);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                    ctx.restore();
+                });
+                if (t < DURATION) requestAnimationFrame(tick);
+                else canvas.remove();
+            };
+            requestAnimationFrame(tick);
+            // Red de seguridad: garantiza la limpieza aunque RAF se pause
+            setTimeout(() => canvas.remove(), DURATION + 800);
+        };
+
+        const grantRoot = () => {
+            isRoot = true;
+            cwd = ["root"];
+            confetti();
+            print(
+                '<span class="warn">Autenticación correcta.</span> Ahora eres <span class="err">root</span> · simulación.',
+            );
+            print('Escribe <span class="u">exit</span> para volver a tu usuario.', "dim");
+        };
+
+        // --- Ejecución ---
+        const history: string[] = [];
+        let histIdx = -1;
+
+        const run = (raw: string) => {
+            const line = raw.trim();
+            print(`${buildPrompt()}&nbsp;${esc(raw)}`);
+            if (!line) return;
+            history.push(line);
+            histIdx = history.length;
+
+            const [cmd, ...args] = line.split(/\s+/);
+            const key = cmd.toLowerCase();
+
+            if (commands[key]) return commands[key](args);
+            print(
+                `comando no encontrado: <span class="warn">${esc(cmd)}</span> — escribe <span class="u">help</span>`,
+                "err",
+            );
+        };
+
+        // --- Autocompletado con Tab ---
+        // no revelar los easter eggs por autocompletado
+        const HIDDEN_CMDS = new Set(["sudo", "su", "felicidades-hunter-3"]);
+        const completeTab = () => {
+            const value = input.value;
+            const parts = value.split(/\s+/);
+            const editing = parts[parts.length - 1];
+            const isFirst = parts.length === 1;
+            const here = childrenAt(cwd) || {};
+            const candidates = isFirst
+                ? Object.keys(commands).filter(
+                      (c) => c.startsWith(editing) && !HIDDEN_CMDS.has(c),
+                  )
+                : Object.keys(here).filter((n) => n.startsWith(editing));
+            if (candidates.length === 0) return;
+
+            if (candidates.length === 1) {
+                const match = candidates[0];
+                parts[parts.length - 1] = match;
+                const suffix = !isFirst && isDir(here[match]) ? "/" : " ";
+                input.value = parts.join(" ") + suffix;
+                return;
+            }
+
+            // Completar hasta el prefijo común más largo
+            const common = candidates.reduce((a, b) => {
+                let i = 0;
+                while (i < a.length && a[i] === b[i]) i++;
+                return a.slice(0, i);
+            });
+            if (common.length > editing.length) {
+                parts[parts.length - 1] = common;
+                input.value = parts.join(" ");
+                return;
+            }
+
+            // Varios candidatos: listarlos (como en bash)
+            print(`${buildPrompt()}&nbsp;${esc(value)}`);
+            print(
+                candidates
+                    .sort()
+                    .map((c) => {
+                        const d = !isFirst && isDir(here[c]);
+                        return `<span class="${d ? "accent" : "u"}">${esc(c)}${d ? "/" : ""}</span>`;
+                    })
+                    .join("&nbsp;&nbsp;"),
+            );
+            body.scrollTop = body.scrollHeight;
+        };
+
+        input.addEventListener("keydown", (e) => {
+            // Cancelar la petición de contraseña (como en una shell real)
+            if (
+                awaitingPw &&
+                (e.key === "Escape" || (e.ctrlKey && e.key.toLowerCase() === "c"))
+            ) {
+                e.preventDefault();
+                input.value = "";
+                input.classList.remove("masked");
+                awaitingPw = false;
+                pwAttempts = 0;
+                print("^C", "dim");
+                updatePrompt();
+                return;
+            }
+            if (e.key === "Enter") {
+                if (awaitingPw) {
+                    const pw = input.value;
+                    input.value = "";
+                    input.classList.remove("masked");
+                    awaitingPw = false;
+                    print(`[sudo] password for ${user}:`);
+                    if (pw.length === 0) {
+                        print("sudo: se requiere una contraseña", "err");
+                        startAuth();
+                    } else if (pw === ROOT_PW) {
+                        pwAttempts = 0;
+                        grantRoot();
+                        updatePrompt();
+                    } else {
+                        pwAttempts++;
+                        if (pwAttempts >= 3) {
+                            pwAttempts = 0;
+                            print("sudo: 3 intentos de contraseña incorrectos", "err");
+                            updatePrompt();
+                        } else {
+                            print("Lo siento, vuelve a intentarlo.", "err");
+                            startAuth();
+                        }
+                    }
+                    body.scrollTop = body.scrollHeight;
+                    return;
+                }
+                const v = input.value;
+                input.value = "";
+                run(v);
+                body.scrollTop = body.scrollHeight;
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                if (histIdx > 0) {
+                    histIdx--;
+                    input.value = history[histIdx] || "";
+                }
+            } else if (e.key === "ArrowDown") {
+                e.preventDefault();
+                if (histIdx < history.length - 1) {
+                    histIdx++;
+                    input.value = history[histIdx] || "";
+                } else {
+                    histIdx = history.length;
+                    input.value = "";
+                }
+            } else if (e.key === "Tab") {
+                e.preventDefault();
+                if (!awaitingPw) completeTab();
+            } else if (e.key === "l" && e.ctrlKey) {
+                e.preventDefault();
+                output.innerHTML = "";
+            }
+        });
+
+        // enfocar el input al pulsar en cualquier parte de la terminal
+        body.addEventListener("click", () => {
+            if (window.getSelection()?.toString()) return;
+            input.focus();
+        });
+
+        // --- Secuencia de arranque (cinemática) ---
+        const boot = [
+            "[  OK  ] Iniciando hferpi-sec shell v1.0",
+            "[  OK  ] Cargando módulos: recon net crypto osint",
+            "[  OK  ] Asignando identidad de sesión...",
+            `[  OK  ] Identidad: user@${host}`,
+            "[  OK  ] Canal seguro establecido",
+            "[  OK  ] Acceso concedido",
+        ];
+
+        (async () => {
+            for (const l of boot) {
+                if (!term.isConnected) return;
+                print(l.replace(/\[  OK  \]/, '<span class="bright">[  OK  ]</span>'), "dim");
+                await sleep(180);
+            }
+            if (!term.isConnected) return;
+            print("");
+            banner();
+            print("");
+            sessionCard();
+            print("");
+            print('Escribe <span class="u">help</span> para ver los comandos.', "dim");
+            print("");
+            inputLine.hidden = false;
+            input.focus();
+            body.scrollTop = body.scrollHeight;
+        })();
+    }
+
+    document.addEventListener("astro:page-load", initConsole);
+</script>

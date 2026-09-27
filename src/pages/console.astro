@@ -222,7 +222,7 @@ import Layout from "../layouts/Layout.astro";
         // --- Sistema de ficheros virtual (árbol anidado) ---
         type FSNode =
             | { file: string; download?: string; copy?: string }
-            | { dir: Record<string, FSNode> };
+            | { dir: Record<string, FSNode>; perm?: string };
         const isDir = (
             n: FSNode | undefined,
         ): n is { dir: Record<string, FSNode> } => !!n && "dir" in n;
@@ -301,6 +301,7 @@ import Layout from "../layouts/Layout.astro";
                     },
                     ".bash_history": { file: "whoami\nid\ncat /etc/shadow" },
                 },
+                perm: "root-only",
             },
         };
 
@@ -321,6 +322,9 @@ import Layout from "../layouts/Layout.astro";
 
         const isBinary = (name: string) =>
             /\.(png|jpe?g|gif|webp|pdf|zip|exe|bin)$/i.test(name);
+
+        // Permisos: /root es 0700 en Linux real — solo root puede entrar.
+        const canEnter = (node: FSNode) => node.perm !== "root-only" || isRoot;
 
         const promptPath = () => {
             const hp = homeSegs();
@@ -494,6 +498,8 @@ import Layout from "../layouts/Layout.astro";
                 if (!node) return print(`cd: ${esc(target)}: no existe`, "err");
                 if (!isDir(node))
                     return print(`cd: ${esc(target)}: no es un directorio`, "err");
+                if (!canEnter(node))
+                    return print(`cd: ${esc(target)}: Permission denied`, "err");
                 cwd = [...cwd, name];
                 updatePrompt();
             },
